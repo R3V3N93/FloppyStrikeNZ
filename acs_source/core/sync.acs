@@ -1,0 +1,58 @@
+strict namespace {
+
+enum CS_SYNC : int
+{
+    SYNC_STATE = 8900,
+    SYNC_TIME = 8901,
+    SYNC_CSPRINT = 8902
+};
+
+function void SyncTime()
+{ 
+    SyncVariable(SYNC_TIME, game.timer);
+}
+
+Script "CSSync" OPEN
+{
+    While(1)
+    {
+        SyncTime();
+        delay(35);
+    }
+}
+
+//@summary Varient of ACS/BCSUtils' SyndVariable()! 
+function void SyncVariableSTR(int tid, str value)
+{
+	if (ClassifyActor(tid) == ACTOR_NONE)
+	{
+		if (!SpawnForced("ACSUtils_Sync", 0.0, 0.0, 0.0, tid))	
+		{
+			ACSUtils_ProgramError(StrParam
+			(
+				s:"Failed to spawn sync actor for tid ", d:tid, s:". ",
+				s:"Make sure you copied \cjdecorate.acsutils \c-to your project."
+			));
+		}
+	}
+					
+	SetActorProperty(tid, APROP_Species, value);
+}
+
+//@summary Varientt of ACS/BCSUtils' GetSyncVar()!
+function int GetSyncSTR(int tid)
+{
+	return GetActorProperty(tid, APROP_Species);
+}
+
+function int GetState()
+{
+    return GetSyncVar(SYNC_STATE);
+}
+
+function int GetTimer()
+{
+    return GetSyncVar(SYNC_TIME);
+}
+
+}

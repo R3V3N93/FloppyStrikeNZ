@@ -1,0 +1,326 @@
+#library "csnexon"
+#nocompact
+#pragma raw include on
+
+#import "zcommon.bcs"
+
+#include "lib/bcsutils.acs"
+
+#import "log.g.acs"
+#import "DebugHud.g.acs"
+
+#include "headers/defines.h.acs"
+#include "headers/exceptions.h.acs"
+#include "headers/alias.h.acs"  
+
+#include "core/player.acs"
+#include "core/game.acs"
+#include "core/og.acs"
+#include "core/sync.acs"
+
+#include "core/weapons.acs"
+#include "core/hud.acs"
+
+#include "core/buymenu/buymenu.acs"
+#include "core/infection.acs"
+#include "core/preprocessor.acs"
+
+#include "debug/debug.acs"
+//#include "debug/hud.acs"
+
+#include "maps/office/box.acs"
+#include "weapons/claw.acs"
+#include "weapons/throwables/molotov.acs"
+#include "weapons/throwables/zbomb.acs"
+#import "acs/extradata/ex_speci.acs"
+
+// GLOBAL TODO
+//@TODO Manage error codes
+//@TODO make a proper wiki. Hell, am I making ZH or something?
+//@TODO Make kill feeds!
+
+strict namespace {
+
+Script "Destructor" (int type, int arg1, int arg2) EVENT
+{
+    if(type == GAMEEVENT_ROUND_ENDS)
+    {
+        StopTimer();
+    }
+}
+
+Script "player_main" ENTER
+{
+    delay(1);
+    hudmessage(s:game.map, s:"  \n\    map by ", s:game.author; HUDMSG_FADEOUT,0,CR_RED,0.5,0.1,9.0,1.0);
+    SetActorSpeed(0, CONST_CS16_OG_SPEED);
+
+    switch(game.mode)
+    {
+        case CSGM_OG:
+            if(IsTerror())
+                Player_SetTeam(1, true);
+            else
+                Player_SetTeam(0, true);
+
+            if(IsTerror())
+                SetPlayerSkin_zan(PlayerNumber(), "Phoenix Connection");
+            else
+                SetPlayerSkin_zan(PlayerNumber(), "SAS");
+                
+            SetPlayerProperty(0, 1, PROP_FROZEN);
+            GiveInventory ("shell", 100);
+            GiveInventory ("clip", 100);
+            if(!IsTerror())
+                GiveInventory("CS163D_HG_USP", 1);
+            else
+                GiveInventory("CS163D_HG_GLOCK", 1);
+
+            GiveInventory("CS163D_ME_Knife", 1);
+            if(game.state == CONST_GAMESTATE_PREP)
+            {
+                LogDebug(__SCRIPT__ + " : Game is in prep state. Terminating.");
+                terminate;
+            }
+            Delay(defTimer_Prep * 35);
+            SetPlayerProperty(0, 0, PROP_FROZEN);
+            LogActivator(__SCRIPT__ + " : Unfrozen");
+            // If Bot
+            if(PlayerIsBot(PlayerNumber()))
+            {
+                ClearInventory(); // Deprives of knife, and pistols
+                GiveInventory ("clip", 100);
+
+                if(IsTerror())
+                    GiveInventory("CS163D_RF_AK47", 1);
+                else
+                    GiveInventory("CS163D_RF_M4A1", 1);
+            }
+            break;
+        case CSGM_ZM:
+            SetActorProperty(0, APROP_DamageFactor, 0.0);
+            GiveInventory("CS163D_HG_USP", 1);
+            GiveInventory("CS163D_ME_Knife", 1);
+            
+            if(game.state == CONST_GAMESTATE_PREP)
+            {
+                LogDebug(__SCRIPT__ + " : Game is in prep state. Terminating.");
+                terminate;
+            }
+
+            while(1)
+            {
+                if(game.state == CONST_GAMESTATE_BEGUN)
+                {
+                    SetActorProperty(0, APROP_DamageFactor, 1.0);
+                    LogActivator(__SCRIPT__ + " : Disabled invincibility");
+                    break;
+                }
+                delay(1); 
+            }
+
+            while(1)
+            {
+                if(!players[PlayerNumber()].infected)
+                {
+                    if(CSGetWeaponAmmo(GetWeapon()) != "")
+                        GiveInventory(CSGetWeaponAmmo(GetWeapon()), 999);
+                }
+                delay(1);
+            }
+            break;
+    }
+}
+
+Script "main" OPEN
+{
+    delay(1);
+    switch(game.mode)
+    {
+        case CSGM_OG:
+            SetState(CONST_GAMESTATE_PREP);
+            if(GetGameModeState() == GAMESTATE_WAITFORPLAYERS || GetGameModeState() == GAMESTATE_COUNTDOWN)
+            { 
+                While(1)
+                {
+                    CSPrint("Waiting for the game to begin");
+                    delay(1);
+                }
+
+                LogDebug(__SCRIPT__ + " : Game is in preparation state. Cancelling the whole script.");
+                terminate;
+            }
+
+            if(GetGameModeState() == GAMESTATE_INPROGRESS)
+            {
+                SetState(CONST_GAMESTATE_BUY);
+            }
+            
+            SetTimer(CONST_TIMER_PREP);
+
+            while(game.timer > 0)
+                delay(1);
+
+            AmbientSound(SND_CONST_KLETSGO, SND_VOLUME);
+            SetState(CONST_GAMESTATE_BEGUN);
+            break;
+        case CSGM_ZM:
+            SetState(CONST_GAMESTATE_PREP);
+            if(GetGameModeState() == GAMESTATE_WAITFORPLAYERS || GetGameModeState() == GAMESTATE_COUNTDOWN)
+            { 
+                While(1)
+                {
+                    CSPrint("Waiting for the game to begin");
+                    delay(1);
+                }
+
+                LogDebug(__SCRIPT__ + " : Game is in preparation state. Cancelling the whole script.");
+                terminate;
+            }
+
+            if(GetGameModeState() == GAMESTATE_INPROGRESS)
+            {
+                SetState(CONST_GAMESTATE_BUY);
+                // Picks host zombies
+                game.hostnum = PlayerCount() / 10 + 1;
+            }
+            
+            SetTimer(CONST_TIMER_PREP);
+
+            AmbientSound(SND_CONST_KLETSGO, SND_VOLUME);
+
+            while(1)
+            {
+                // If Preparation timer is over, then it switches its gamestate to BEGUN.
+                // After that, the game picks host zombie.
+                if(game.timer <= 0)
+                {
+                    for(int i = 0; i < game.hostnum; i++)
+                    {
+                        while(1)
+                        {
+                            int temphost = random(0, MAX_PLAYERS - 1);
+                            if(!players[temphost].host && PlayerInGame(temphost))
+                            {
+                                players[temphost].host = true;
+                                LogDebug(__SCRIPT__ + " : Player " + str(i) + " has been selected as Host Zombie");
+                                break;
+                            }
+                        } // It shouldn't get stuck in infinite loop in formal way..
+                    }
+
+                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    {
+                        if(players[i].host == true)
+                        {   
+                            int caught = CSInfectPlayer(i, true);
+                            if(caught == -1)
+                            {
+                                KillSwitch("given pnum " + str(i) + " is not a player... FOR SOME REASON!", ERR_NOT_PLAYER);
+                                terminate;
+                            }
+                            else if(caught == -2)
+                            {
+                                KillSwitch("given pnum " + str(i) + " is already a zombie... FOR SOME REASON!", ERR_ALREADY_ZOMBIE);
+                                terminate;
+                            }
+                            else if(caught == -4)
+                            {
+                                KillSwitch("Couldn't infect the player " + str(i) + " Successfully!", ERR_NOT_SUCC);
+                                terminate;
+                            }
+                            else if(caught == -3)
+                                LogDebug(__SCRIPT__ + " : Player " + str(i) + " is dead. Canceling his host zombie transformation");
+                            else
+                                LogDebug(__SCRIPT__ + " : Player " + str(i) + " has turned to Host Zombie");
+                        }
+                        else
+                        {
+                            if(PlayerCount() > 2)
+                                ACSa("PlayerSetTeam", i, TEAM_BLUE);
+                        }
+                    }
+
+                    // Checks for innocent survivors who became host zombies for some reason.
+                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    {
+                        if(!players[i].host && players[i].infected)
+                        {
+                            KillSwitch("given pnum " + str(i) + " is a innocent survivor!", EXCEPTION_WRONG_HOST);
+                            terminate;
+                        }
+                    }
+                    // Picking host zombies ends
+                    SetActivatorToPlayer(-1);
+                    break;
+                }
+                delay(1);
+            }
+
+            SetState(CONST_GAMESTATE_BEGUN);
+            SetTimer(CONST_TIMER_GAME);
+            ACS("ZombieBombGiver");
+            while(1)
+            {
+                // If timer is over, The code kills every zombies, so that the blue team can win
+                if(game.timer <= 0)
+                {
+                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    {
+                        if(players[i].infected)
+                        {
+                            Thing_Damage2(GetPlayerTid(i), 100000, "normal");
+                        }
+                    }
+                    AmbientSound(SND_CTWON, SND_VOLUME);
+                    CSPrint("#Cstrike_TitlesTXT_HUMANs_Win");
+                }
+
+                
+                if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE)
+                {
+                    // This will happen if zombie wins.
+                    if(GetZombieCount() == PlayerCount())
+                    {
+                        //TODO : Figure out how to fix the victory brought about by impulsive team change via Player_SetTeam causing bugged victory, resulting in stuck.
+                        StopTimer();
+                        AmbientSound(SND_TRWON, SND_VOLUME);
+                        CSPrint("#Cstrike_TitlesTXT_ZOMBIEs_Win");
+                        //Exit_Normal(0);
+                        terminate;
+                    }
+                    // This will happen if human wins(most likely killing every zombies).
+                    AmbientSound(SND_CTWON, SND_VOLUME);
+                    CSPrint("#Cstrike_TitlesTXT_HUMANs_Win");
+                    //Exit_Normal(0);
+                    break;
+                }
+                delay(1);
+            }
+        case CSGM_DEV:
+            game.state = CONST_GAMESTATE_BUY;
+    }
+}
+
+Script "ZombieBombGiver" (void)
+{
+    while(game.state == CONST_GAMESTATE_BEGUN && GetGameModeState() == GAMESTATE_INPROGRESS)
+    {
+        // Every one minutes elapsed, it gives a zombie bomb to host zombies.
+        if(((game.timer - 1) % 60) == 0)
+        {
+            for(int i = 0; i < MAX_PLAYERS; i++)
+            {
+                if(players[i].host && players[i].alive)
+                {
+                    GiveActorInventory(GetPlayerTid(i), "CS163D_GR_Zombie_Bomb_Mag", 1);
+                    LogDebug(__SCRIPT__ + " : Zombie bomb given to " + str(GetPlayerTid(i)));
+                    PlaySound(GetPlayerTid(i), SND_CONST_ZBOMB_REGEN);
+                }
+            }
+        }
+        delay(35);
+    }
+}
+
+} // strict namespace

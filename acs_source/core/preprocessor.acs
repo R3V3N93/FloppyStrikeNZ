@@ -1,0 +1,109 @@
+
+strict namespace {
+
+//@TODO soon replace all these language things into custom lump file, via new Lump functions of zand
+function int CSGameMode()
+{
+    if(StrParam(l:"CS_GAMEMODE_" + StrParam(n:PRINTNAME_LEVEL)) == "OG")
+        return CSGM_OG;
+    else if(StrParam(l:"CS_GAMEMODE_" + StrParam(n:PRINTNAME_LEVEL)) == "ZM")
+        return CSGM_ZM;
+    else if(StrParam(l:"CS_GAMEMODE_" + StrParam(n:PRINTNAME_LEVEL)) == "DEV")
+        return CSGM_DEV;
+    
+    return -1;
+}
+
+function str CSMapName()
+{
+    return StrParam(l:"CS_MAPNAME_" + StrParam(n:PRINTNAME_LEVEL));
+}
+
+function str CSMapAuthor()
+{
+    return StrParam(l:"CS_AUTHOR_" + StrParam(n:PRINTNAME_LEVEL));
+}
+
+function int CSDefaultTimer_Game()
+{
+    return atoi(StrParam(l:"CS_TIMER_GAME_" + StrParam(n:PRINTNAME_LEVEL)));
+}
+
+function int CSDefaultTimer_Prep()
+{
+    return atoi(StrParam(l:"CS_TIMER_PREP_" + StrParam(n:PRINTNAME_LEVEL)));
+}
+
+Script "PreProcessor" OPEN
+{
+    LogDebug(__SCRIPT__ + " : PreProcessor started");
+    game.mode = CSGameMode();
+    if(game.mode == -1)
+    {
+        game.mode = 0;
+        LogWarning("Invalid gamemode value for this map! Check language.cs again! Implicitly setting the game.mode to OG");
+    }
+
+    game.map = CSMapName();
+    if(game.map == "")
+        game.map = "JUST_ANOTHER_COUNTER_STRIKE_MAP";
+    
+    defTimer_Game = CSDefaultTimer_Game();
+    if(defTimer_Game <= 0)
+    {
+        defTimer_Game = CONST_GAME_TIME_DEFAULT;
+        LogWarning("Invalid game timer value for this map! Check language.cs again! Implicitly setting the defTimer_Game to CONST_GAME_TIMER_DEFAULT");
+    }
+    
+    defTimer_Prep = CSDefaultTimer_Prep();
+    if(defTimer_Prep <= 0)
+    {
+        defTimer_Prep = CONST_PREPARE_TIME_DEFAULT;
+        LogWarning("Invalid game timer value for this map! Check language.cs again! Implicitly setting the defTimer_Prep to CONST_PREPARE_TIMER_DEFAULT");
+    }
+    LogDebug("\n" + __SCRIPT__ + " : \ngame.map = " + game.map + "\ngame.mode = " + str(game.mode) + "\ndefTimer_Game = " + str(defTimer_Game) + "\ndefTimer_Prep = " + str(defTimer_Prep) + "\n");
+
+    game.author = CSMapAuthor();
+    if(game.map == "")
+        game.map = "UNKNOWN_AUTHOR";
+}
+
+Script "PreProcessor_client" ENTER CLIENTSIDE
+{
+    if(ConsolePlayerNumber() != PlayerNumber())
+    {
+        terminate;
+    }
+    LogDebug(__SCRIPT__ + " : PreProcessor started on client " + str(ConsolePlayerNumber()));
+    game.mode = CSGameMode();
+    if(game.mode == -1)
+    {
+        game.mode = 0;
+        LogWarning("Invalid gamemode value for this map! Check language.cs again! Implicitly setting the game.mode to OG");
+    }
+
+    game.map = CSMapName();
+    if(game.map == "")
+        game.map = "JUST_ANOTHER_COUNTER_STRIKE_MAP";
+    
+    defTimer_Game = CSDefaultTimer_Game();
+    if(defTimer_Game <= 0)
+    {
+        defTimer_Game = CONST_GAME_TIME_DEFAULT;
+        LogWarning("Invalid game timer value for this map! Check language.cs again! Implicitly setting the defTimer_Game to CONST_GAME_TIMER_DEFAULT");
+    }
+    
+    defTimer_Prep = CSDefaultTimer_Prep();
+    if(defTimer_Prep <= 0)
+    {
+        defTimer_Prep = CONST_PREPARE_TIME_DEFAULT;
+        LogWarning("Invalid game timer value for this map! Check language.cs again! Implicitly setting the defTimer_Prep to CONST_PREPARE_TIMER_DEFAULT");
+    }
+    LogDebug("\n" + __SCRIPT__ + " : \ngame.map = " + game.map + "\ngame.mode = " + str(game.mode) + "\ndefTimer_Game = " + str(defTimer_Game) + "\ndefTimer_Prep = " + str(defTimer_Prep) + "\n");
+
+    game.author = CSMapAuthor();
+    if(game.map == "")
+        game.map = "UNKNOWN_AUTHOR";
+}
+
+}

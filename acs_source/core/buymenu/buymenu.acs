@@ -1,0 +1,71 @@
+
+#import "acs_source_public/csbuy.g.acs"
+#include "description.acs"
+
+strict namespace
+{
+
+Script "buymenu" ENTER ClientSide
+{
+	if(PlayerNumber() != ConsolePlayerNumber())
+        terminate; 
+		
+	delay(5);
+    CSBuy_BuymenuSetup("integar", "calibri");
+    CSBuy_AddSlot(1, 1);
+    CSBuy_AddSlot(2, 1);
+    CSBuy_AddSlot(4, 2);
+	CSBuy_AddSlot(0, 1);
+
+    CSBuy_AddCategory("PISTOLS", 2);
+	CSBuy_AddWeapon(1, "9X19MM SIDEARM", "CS163D_HG_Glock", 0, CS_WEAP_DESC_GLOCK, "glock188", false);
+	CSBuy_AddWeapon(1, "KM .45 TACTICAL", "CS163D_HG_USP", 0, CS_WEAP_DESC_USP, "usp45", false);
+	CSBuy_AddWeapon(1, "NIGHT HAWK .50C", "CS163D_HG_DEAGLE", 0, CS_WEAP_DESC_DEAGLE, "deseagle", false);
+	CSBuy_AddWeapon(1, ".40 DUAL ELITES", "CS163D_HG_ELITE", 0, CS_WEAP_DESC_ELITE, "elitegui", false);
+
+	CSBuy_AddCategory("SHOTGUNS", 1);
+	CSBuy_AddWeapon(2, "LEONE 12 GAUGE SUPER", "CS163D_SG_M3", 0, CS_WEAP_DESC_M3, "m3m3m3m3", false);
+	CSBuy_AddWeapon(2, "LEONE YG1265 AUTO SHOTGUN", "CS163D_SG_XM1014", 0, CS_WEAP_DESC_XM1014, "xm1014", false);
+
+	CSBuy_AddCategory("CSBUY_EMPTY_BTN", 1);
+
+	CSBuy_AddCategory("RIFLES", 1);
+	if(game.mode == CSGM_ZM || IsTerror())
+		CSBuy_AddWeapon(4, "CV-47", "CS163D_RF_AK47", 0, CS_WEAP_DESC_AK47, "ak47ak47", false);
+	if(game.mode == CSGM_ZM || !IsTerror())
+		CSBuy_AddWeapon(4, "MAVERICK M4A1 CARBINE", "CS163D_RF_M4A1", 0, CS_WEAP_DESC_M4A1, "m4a1m4a1", false);
+	CSBuy_AddWeapon(4, "D3/AU-1", "CS163D_RF_TRGAYGUN", 0, CS_WEAP_DESC_G3, "g3g3g3g3", false);
+
+	CSBuy_AddCategory("MACHINE GUNS", 1);
+	CSBuy_AddWeapon(5, "ES M249 PARA", "CS163D_MG_M249", 0, CS_WEAP_DESC_M249, "m249m249", false);
+
+	CSBuy_AddCategory("CSBUY_EMPTY_BTN", 0);
+	CSBuy_AddCategory("CSBUY_EMPTY_BTN", 0);
+
+	CSBuy_AddCategory("Equipments", 4);
+	CSBuy_AddWeapon(8, "HE Grenade", "CS163D_GR_HEGRENADE", 0, CS_WEAP_DESC_HEGRENADE, "hegren", false);
+	if(game.mode == CSGM_ZM)
+		CSBuy_AddWeapon(8, "Molotov", "CS163D_GR_Molotov", 0, CS_WEAP_DESC_MOLOTOV, "moltov", false);
+
+    while(1)
+    {
+        if(GetState() == CONST_GAMESTATE_BUY)
+        {
+            if(KeyPressed(BT_USE))
+            {
+                CSBuy_Buymenu();
+            }
+			CSPrint("Press " + StrParam(k:"+USE") + " to open buy menu." + " Game starts after current timer ends.");
+        }
+
+        if(GetState() == CONST_GAMESTATE_BEGUN)
+		{
+			ClearCSPrint();
+            break;
+		}
+		
+		delay(1);
+    }
+}
+
+}

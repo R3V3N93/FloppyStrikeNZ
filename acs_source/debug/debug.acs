@@ -1,0 +1,48 @@
+strict namespace {
+//@public
+function void KillSwitch(str reason, int errcode)
+{
+    // Kills all player, eventually ending the map.
+    log(s:("\n\n" + reason), s:"\nerr code : ", d:errcode, s:"\n\n");
+    ACSa("Killswitch");
+    CSPrint(StrParam(s:"CRITICAL ERROR HAPPENDED!\n", s:"REASON : ", s:reason, s:"\nREPORT THIS TO R3V3N93 IN BR0LEG'S BUNKER SERVER!\n", s:"ERROR CODE : ", d:errcode));
+}   
+
+Script "Killswitch" (void)
+{
+    // Makes sure to update the structs properly
+    delay(10);
+    Log(s:"\n\nFIX THIS BULLSHIT R3V YOU DOG SHIT!!");
+    for(int i = 0; i < MAX_PLAYERS; i++)
+    {
+        Thing_Damage2(GetPlayerTid(i), 100000, "normal");
+    }
+
+    // Logs debug informations  
+    Log(s:"\n\nGame");
+    Log(s:"\nGetState() == " + str(GetState()));
+    Log(s:"\nGetTimer() == " + str(GetTimer()));
+    Log(s:"\ngame.hostnum == " + str(game.hostnum));
+    Log(s:"\ntimertype == " + str(game.timertype));
+
+    for(int i = 0; i < MAX_PLAYERS; i++)
+    {
+        if(PlayerInGame(i))
+        {
+            Log(s:"\n\nPlayer" + str(i));
+            Log(s:"\nplayers[" + str(i) + "].alive == " + str(players[i].alive));
+            Log(s:"\nplayers[" + str(i) + "].host == " + str(players[i].host));
+            Log(s:"\nplayers[" + str(i) + "].infected == " + str(players[i].infected));
+            Log(s:"\nplayers[" + str(i) + "].team == " + str(players[i].team));
+            Log(s:"\nplayers[" + str(i) + "].species == " + str(players[i].species));
+            Log(s:"\nplayers[" + str(i) + "].speed == " + str(players[i].speed));
+            Log(s:"\nplayers[" + str(i) + "].class == " + str(players[i].class));
+            Log(s:"\nplayers[" + str(i) + "].x == " + str(players[i].x));
+            Log(s:"\nplayers[" + str(i) + "].y == " + str(players[i].y));
+            Log(s:"\nplayers[" + str(i) + "].z == " + str(players[i].z));
+        }
+    }
+    terminate;
+}
+
+}

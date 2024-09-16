@@ -1,0 +1,19 @@
+bool ACS (str name, int arg1 = 0, int arg2 = 0, int arg3 = 0)
+{
+    return ACS_NamedExecute(name, 0, arg1, arg2, arg3);
+}
+
+bool ACSa (str name, int arg1 = 0, int arg2 = 0, int arg3 = 0)
+{
+    return ACS_NamedExecuteAlways(name, 0, arg1, arg2, arg3);
+}
+
+int ACSr (str name, int arg1 = 0, int arg2 = 0, int arg3 = 0)
+{
+    return ACS_NamedExecuteWithResult(name, arg1, arg2, arg3);
+}
+
+bool ACSt (str name)
+{
+    return ACS_NamedTerminate(name, 0);
+}

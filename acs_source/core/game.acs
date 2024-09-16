@@ -1,0 +1,151 @@
+
+
+strict namespace {
+
+enum DefaultTime : int
+{
+    CONST_PREPARE_TIME_DEFAULT = 20,
+    CONST_GAME_TIME_DEFAULT = 180
+    //secs
+};
+
+enum GAMESTATE : int
+{
+    CONST_GAMESTATE_PREP = 0x01,
+    CONST_GAMESTATE_BUY = 0x02,
+    CONST_GAMESTATE_BEGUN = 0x03
+};
+
+int defTimer_Prep = CONST_PREPARE_TIME_DEFAULT;
+int defTimer_Game = CONST_GAME_TIME_DEFAULT;
+
+enum TIMERNAME : int
+{
+    CONST_TIMER_PREP = 0x01,
+    CONST_TIMER_GAME = 0x02
+};
+
+enum GAMEMODE : int
+{
+    CSGM_OG,
+    CSGM_ZM,
+    CSGM_DEV
+};
+
+struct gameinfo
+{
+    str map;
+    str author;
+    int mode;
+    int state;
+    int timer;
+    int hostnum;
+    int timertype;
+};
+
+void StopTimer()
+{
+    game.timertype = 0;
+    ACS_NamedTerminate("CSTimer", 0);
+}
+
+struct gameinfo game;
+
+void SetState(int state)
+{
+    game.state = state;
+    SyncVariable(SYNC_STATE, game.state);
+    LogDebug(__FUNCTION__ + " : game.state has been changed to " + str(game.state));
+    return;
+}
+
+void SetTimer(int what)
+{
+    if(what == CONST_TIMER_PREP)
+    {
+        LogDebug(__FUNCTION__ + " : Timer has been set to PREPARATION");
+        game.timer = defTimer_Prep; 
+        game.timertype = what;
+        StopTimer();
+        ACS("CSTimer", defTimer_Prep);
+    }
+
+    if(what == CONST_TIMER_GAME)
+    {
+        LogDebug(__FUNCTION__ + " : Timer has been set to GAME");
+        game.timer = defTimer_Game; 
+        game.timertype = what;
+        StopTimer();
+        ACS("CSTimer", defTimer_Game);
+    }
+}
+
+Script "CSTimer" (int time)
+{
+    for(int i = 0; i < time; i++)
+    {   
+        if(game.timer >= 1 && game.timer <= 5 && game.timertype == CONST_TIMER_PREP && game.mode == CSGM_ZM)
+        {
+            AmbientSound("vox_" + str(game.timer), SND_VOLUME);
+        }
+        delay(35);
+        game.timer--;
+    }
+    terminate;
+}
+
+//@public
+function void ClearCSPrint()
+{
+    HudMessageBold(s:""; HUDMSG_PLAIN, -1600, CR_GOLD, 720.0, 270.0, 0.0, 1.0);
+    HudMessageBold(s:""; HUDMSG_PLAIN, -1599, CR_GOLD, 720.0, 270.0, 0.0, 1.0);
+}
+} // strict namespace
+
+function void CSPrint_BareBone(str what)
+{
+    int x = (GetAspectRatio() != ASPECT_4_3 ? GetScreenWidth() * 3/4 : GetScreenWidth());
+    int y = GetScreenHeight();
+    //print(d:x, s:" ", d:y);
+    SetHUDSize(x, y, true);
+    SetFont("KILFONT");
+    HudMessageBold(s:"\c[O4]", s:what; HUDMSG_PLAIN, -1600, CR_UNTRANSLATED, (x / 2) << 16, (y / 4) << 16, 0.0, 1.0);
+
+    SetFont("SHDFONT");
+    HudMessageBold(s:"\c[G2]", s:what; HUDMSG_PLAIN|HUDMSG_LAYER_UNDERHUD, -1599, CR_UNTRANSLATED, (x / 2) << 16 + 1.0, (y / 4) << 16 + 1.0, 0.0, 1.0);
+}
+
+//@public
+function void CSPrint(str what)
+{
+    if(!IsClient())
+    {
+        NamedSendNetworkString("CSPrint_script", what, -1);
+        //SyncVariableSTR(SYNC_CSPRINT, what);
+    }
+    else
+    {
+        CSPrint_BareBone(what);
+    }
+    return;
+}
+
+script "CSPrint_script" (int what) CLIENTSIDE 
+{
+    /*
+    if(PlayerNumber() != ConsolePlayerNumber())
+        terminate; */
+
+    CSPrint_BareBone(what);
+    /*
+    While(1)
+    {
+        if(StrICmp(GetSyncSTR(SYNC_CSPRINT), "") == 0)
+        {
+            CSPrint_BareBone(GetSyncSTR(SYNC_CSPRINT));
+            SyncVariableSTR(SYNC_CSPRINT, ""); //I hope this kind of desync is fine..
+        }
+        delay(1);
+    }*/
+}
+

@@ -1,0 +1,88 @@
+#define CONST_PLAYER_TID 99900
+
+strict namespace {
+
+
+
+struct PlayerInfo
+{
+    bool alive;
+    
+    bool host;
+    bool infected;
+    int team;
+    str species;
+    int speed;
+    str class;
+
+    fixed x;
+    fixed y;
+    fixed z;
+};
+
+//@public
+//@summary Checks if given player number is valid playernumber.
+function bool CheckPlayerNumber(int pnum, str func)
+{
+    // Checks if pnum is valid playernumber
+    if(pnum < 0 || pnum >= MAX_PLAYERS)
+    {
+        LogError(__FUNCTION__ + " : Called from " + func + " : pnum " + str(pnum) + " is not a valid playernumber! Returning false.");
+        return false;
+    }
+    return true;
+}
+
+//@public
+function int GetPlayerTid(int pnum)
+{   
+    if(!CheckPlayerNumber(pnum, __FUNCTION__))
+        return -1;
+
+    return pnum + CONST_PLAYER_TID;
+}
+
+//@public
+function int GetPlayerNumberFromTid(int tid)
+{   
+    return tid - CONST_PLAYER_TID;
+}
+
+struct Playerinfo players[MAX_PLAYERS];
+
+function bool HideHud()
+{
+    GiveInventory("HideHUD",1); 
+    if(CheckInventory("HideHUD") == 0)
+    {
+        LogError(__FUNCTION__ + " : Hidehud not given!");
+        return false;
+    }
+    return true;
+
+}
+
+Script "Update_Player" ENTER
+{
+    int pn = PlayerNumber(); //quick alias
+    Thing_ChangeTID(0, GetPlayerTid(pn));
+    ClearInventory();
+    
+    while(1)
+    {
+        HideHud();
+        players[pn].alive = IsAlive();
+
+        //players[pn].infected = CSCheckInfection(pn);
+        players[pn].species = gETActorProperty(0, APROP_Species);
+        players[pn].speed = GetActorSpeed(0);
+        players[pn].class = GetActorClass(0);
+
+        players[pn].team = PlayerTeam();
+        players[pn].x = GetActorX(0);
+        players[pn].y = GetActorY(0);
+        players[pn].z = GetActorZ(0);
+        delay(1);
+    }
+}
+}

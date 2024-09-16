@@ -1,0 +1,69 @@
+strict namespace {
+enum WEAPONS : int
+{
+    CONST_WEAPONS_NOTSUPP = 0,
+    CONST_WEAPONS_HG = 1, // Pistols
+    CONST_WEAPONS_SG = 2, // Shotguns
+    CONST_WEAPONS_RF = 3, // Rifles
+    CONST_WEAPONS_MG = 4, // Machinguns
+    CONST_WEAPONS_ME = 5, // Melee
+    CONST_WEAPONS_GR = 6, // Grenades(equiments)
+
+    CONST_WEAPONS_TYPES_AMOUNT = 6
+};
+
+enum WEAPONS_str : str
+{
+    CONST_WEAPONS_PREFIX = "CS163d_",
+    CONST_WEAPONS_TYPE_HG = "CS163d_HG",
+    CONST_WEAPONS_TYPE_SG = "CS163d_SG",
+    CONST_WEAPONS_TYPE_RF = "CS163d_RF",
+    CONST_WEAPONS_TYPE_MG = "CS163d_MG",
+    CONST_WEAPONS_TYPE_ME = "CS163d_ME",
+    CONST_WEAPONS_TYPE_GR = "CS163d_GR"
+};
+
+str _CSWeaponsTypes[CONST_WEAPONS_TYPES_AMOUNT] = {
+CONST_WEAPONS_TYPE_HG, 
+CONST_WEAPONS_TYPE_SG, 
+CONST_WEAPONS_TYPE_RF,
+CONST_WEAPONS_TYPE_MG,
+CONST_WEAPONS_TYPE_ME,
+CONST_WEAPONS_TYPE_GR
+};
+
+//@public
+//@summary Distinguishes given weapon's type. if not a specifiable type, returns 0. 
+function int CSDistinguishWeapon(str weapon)
+{
+    for(int i = 0; i < CONST_WEAPONS_TYPES_AMOUNT; i++)
+    {
+        if(StrFindI(weapon, _CSWeaponsTypes[i]) != -1)
+            return i + 1;
+    }
+    return 0;
+}
+
+//@public
+//@summary return's the given weapon's magazine actor's name 
+function str CSGetWeaponMag(str weapon)
+{
+    return weapon + "_mag";
+}
+
+//@public
+//@summary returns what ammo does the weapon use. [R3V'S SELFISH NOTE : I don't like this personally, as it is hardcoded to set appropriate ammotype according to the weapon's type, not parsing them automatically. ye]
+function str CSGetWeaponAmmo(str weapon)
+{
+    if(CSDistinguishWeapon(weapon) == CONST_WEAPONS_SG)
+        return "Shell";
+    else if(CSDistinguishWeapon(weapon) == CONST_WEAPONS_ME || CSDistinguishWeapon(weapon) == CONST_WEAPONS_NOTSUPP)
+        return ""; // Meaning nothing.
+    else if(CSDistinguishWeapon(weapon) == CONST_WEAPONS_GR)
+        return CSGetWeaponMag(weapon);
+    else
+        return "Clip";
+    return "";
+}
+
+}

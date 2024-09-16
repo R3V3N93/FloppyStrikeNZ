@@ -1,0 +1,7 @@
+function bool IsTerror()
+{
+    if(game.mode != CSGM_OG)
+        return false;
+
+	return (PlayerTeam() == 3 || PlayerTeam() == 1);
+}

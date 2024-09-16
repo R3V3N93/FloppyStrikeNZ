@@ -1,0 +1,51 @@
+strict namespace {
+Script "hud" ENTER ClientSide
+{
+    SetDebugTypeQuantity(4);
+    if(!IsClient())
+        terminate;
+    while(1)
+    {
+        ClearDebugItems();
+        NameDebugType(0, "Player");
+        NameDebugType(1, "Game");
+        NameDebugType(2, "Consts");
+        AddDebugInfoTrackerItem(0, "Alive?", str(players[PlayerNumber()].alive));
+        AddDebugInfoTrackerItem(0, "X", str(players[PlayerNumber()].x));
+        AddDebugInfoTrackerItem(0, "Y", str(players[PlayerNumber()].y));
+        AddDebugInfoTrackerItem(0, "Z", str(players[PlayerNumber()].z));
+        AddDebugInfoTrackerItem(0, "TID", str(GetPlayerTid(PlayerNumber())));
+        AddDebugInfoTrackerItem(0, "Host?", str(players[PlayerNumber()].host));
+        AddDebugInfoTrackerItem(0, "Infected?", str(players[PlayerNumber()].infected));
+        AddDebugInfoTrackerItem(0, "species", str(players[PlayerNumber()].species));
+        AddDebugInfoTrackerItem(0, "class", str(players[PlayerNumber()].class));
+        AddDebugInfoTrackerItem(0, "speed", str(players[PlayerNumber()].speed));
+        AddDebugInfoTrackerItem(0, "Team", str(players[PlayerNumber()].team));
+        AddDebugInfoTrackerItem(0, "Zombies Count", str(GetZombieCount()));
+        AddDebugInfoTrackerItem(0, "Screen width", str(GetScreenWidth()));
+        AddDebugInfoTrackerItem(0, "Screen height", str(GetScreenHeight()));
+        AddDebugInfoTrackerItem(0, "Aspect Ratio", str(fixed(GetScreenWidth()) / fixed(GetScreenHeight())));
+         AddDebugInfoTrackerItem(2, "prop health", str(CSHUD_HEALTH_X_PROPORTION));
+        AddDebugInfoTrackerItem(2, "prop armour", str(CSHUD_ARMOUR_X_PROPORTION));
+        AddDebugInfoTrackerItem(2, "prop timer 1", str(CSHUD_TIMER_X_1_PROPORTION));
+        AddDebugInfoTrackerItem(2, "prop timer 2", str(CSHUD_TIMER_X_2_PROPORTION));
+        AddDebugInfoTrackerItem(2, "prop timer 3", str(CSHUD_TIMER_X_3_PROPORTION));
+        AddDebugInfoTrackerItem(2, "prop ammo 1", str(CSHUD_AMMO_1_PROPORTION));
+        AddDebugInfoTrackerItem(2, "prop ammo 2", str(CSHUD_AMMO_2_PROPORTION));
+        AddDebugInfoTrackerItem(2, "prop ammo 3", str(CSHUD_AMMO_3_PROPORTION));
+
+        AddDebugInfoTrackerItem(1, "State", str(GetState()));
+        AddDebugInfoTrackerItem(1, "Actual state", str(GetGamemodeState()));
+        AddDebugInfoTrackerItem(1, "Timer", str(GetTimer()));
+        AddDebugInfoTrackerItem(1, "Timer type", str(game.timertype));
+        AddDebugInfoTrackerItem(1, "Host number", str(game.hostnum));
+        AddDebugInfoTrackerItem(1, "PlayerCount()", str(PlayerCount()));
+        AddDebugInfoTrackerItem(1, "map name", game.map);
+        AddDebugInfoTrackerItem(1, "author", game.author);
+        AddDebugInfoTrackerItem(1, "mode", str(game.mode));
+        
+        DisplayDebugHud();
+        delay(1); 
+    }
+}
+}

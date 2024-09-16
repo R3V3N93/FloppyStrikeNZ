@@ -1,0 +1,13 @@
+Actor ACSUtils_Sync
+{
+	+NOBLOCKMAP
+	+NOINTERACTION
+	+NOCLIP
+
+	States
+	{
+	Spawn:
+		TNT1 A -1
+		Stop
+	}
+}

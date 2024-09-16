@@ -1,0 +1,207 @@
+
+
+strict namespace {
+
+//@TODO : make it not spammable!
+void PlayMuninya(void)
+{
+    AmbientSound("nihilanth_kor", SND_VOLUME);
+    return;
+}
+
+
+//@TODO : make it not spammable!
+void PlayMuninya_norm(void)
+{
+    AmbientSound("fz_scream1", SND_VOLUME);
+    return;
+}
+
+//@public
+function int GetZombieCount()
+{
+    int amount;
+    for(int i = 0; i < MAX_PLAYERS; i++)
+    {
+        if(players[i].infected && players[i].alive)
+            amount++;
+    }
+    return amount;
+}
+
+//@public
+//@summary Checks if given playernumber's player is zombie or not.
+function bool CSCheckInfection(int pnum) 
+{
+    if(!CheckPlayerNumber(pnum, __FUNCTION__))
+        return false;
+
+    // Checks if the player is already dead or not.
+    if(!ActorIsAlive(GetPlayerTid(pnum)))
+    {
+        LogDebug(__FUNCTION__ + " : False returned from death/spectator from player " + str(pnum));
+        return false;
+    }
+    
+    // Checks the pnum's class
+    if(StrICmp(GetActorClass(GetPlayerTid(pnum)), CLASS_ZOMBI_HOST) != 0 && StrICmp(GetActorClass(GetPlayerTid(pnum)), CLASS_ZOMBI) != 0)
+    {
+        LogDebug(__FUNCTION__ + " : False returned from class from player " + str(pnum) + "\nClass : " + GetActorClass(GetPlayerTid(pnum)));
+        LogDebug(__FUNCTION__ + " : Desired Class : " + CLASS_ZOMBI + " " + CLASS_ZOMBI_HOST);
+        return false;
+    }
+    
+    // Checks if the activator has appropriate zombie weapon
+    if(CheckActorInventory(GetPlayerTid(pnum), ITEM_ZOMBI_KNIFE_HOST) == 0 && CheckActorInventory(GetPlayerTid(pnum), ITEM_ZOMBI_KNIFE) == 0)
+    {
+        LogDebug(__FUNCTION__ + " : False returned from knife from player " + str(pnum));
+        return false;
+    }
+
+    // Checks if the activator has proper zombie vision power up.
+    if(CheckActorInventory(GetPlayerTid(pnum), ITEM_ZOMBI_VISION) == 0)
+    {
+        LogDebug(__FUNCTION__ + " : False returned from vision from player " + str(pnum));
+        return false;
+    }
+
+    // Checks if the activator's species is appropriate
+    if(GetActorSpecies(GetPlayerTid(pnum)) != CLASS_ZOMBI_SPECIES)
+    {
+        LogDebug(__FUNCTION__ + " : False returned from species from player " + str(pnum));
+        return false;
+    }
+
+    // Finally the activator proved that self is zombie.
+    return true;
+}
+
+Script "PlayerSetTeam" (int pnum, int team)
+{
+    if(!CheckPlayerNumber(pnum, __SCRIPT__))
+        terminate;
+    SetActivatorToPlayer(pnum);
+    if(!players[pnum].alive)
+        terminate;
+        
+    if(!Player_SetTeam(team, false))
+    {
+        KillSwitch("Couldn't Change player" + str(pnum) + "'s team to " + str(team) + "!", EXCEPTION_FAILED_TEAMSET);
+        terminate;
+    }
+    else
+        LogDebug(__SCRIPT__ + " : Player " + str(pnum) + "'s team has been changed to " + str(team));
+    terminate;
+}
+
+enum ERR_CODE : int
+{
+    ERR_NOT_PLAYER = -1,
+    ERR_ALREADY_ZOMBIE = -2,
+    ERR_NOT_ALIVE = -3,
+    ERR_NOT_SUCC = -4
+};
+
+// public
+// summary Turns one given pnum's player into zombie. Returns minus values if failed. 
+int CSInfectPlayer(int pnum, bool host = false) 
+{
+    if(!CheckPlayerNumber(pnum, __FUNCTION__))
+        return ERR_NOT_PLAYER;
+
+    // Checks if player is zombie or not
+    if(CSCheckInfection(pnum))
+    {
+        LogWarning(__FUNCTION__ + " : Player " + str(Pnum) + " is already a zombie. Returning false.");
+        return ERR_ALREADY_ZOMBIE;
+    }
+    // If passed, continues to morph the one into muninya
+
+    // Checks if the player is already dead or not.
+    if(!ActorIsAlive(GetPlayerTid(pnum)))
+    {
+        LogWarning(__FUNCTION__ + " : Tried to infect a dead player " + str(pnum) + ". Returning false");
+        return ERR_NOT_ALIVE;
+    }
+    ClearActorInventory(GetPlayerTid(pnum));
+    MorphActor(GetPlayerTid(pnum), (host ? CLASS_ZOMBI_HOST : CLASS_ZOMBI), "Zombie", 3000000, MRF_NEWTIDBEHAVIOUR, "MapSpot", "MapSpot");
+    GiveActorInventory(GetPlayerTid(pnum), (host ? ITEM_ZOMBI_KNIFE_HOST : ITEM_ZOMBI_KNIFE), 1);
+    GiveActorInventory(GetPlayerTid(pnum), ITEM_ZOMBI_VISION, 1);
+    SetActorProperty(GetPlayerTid(pnum), APROP_Species, CLASS_ZOMBI_SPECIES);
+    SetActorProperty(GetPlayerTid(pnum), APROP_Speed, CONST_ZOMBIE_SPEED);
+    if(host)
+    {
+        GiveActorInventory(GetPlayerTid(pnum), "CS163D_GR_Zombie_Bomb", 1);
+        // @TODO remove this once Weapon.ammogive stops malfunctioning
+        TakeActorInventory(GetPlayerTid(pnum), "CS163D_GR_Zombie_Bomb_Mag", CheckActorInventory(GetPlayerTid(pnum), "CS163D_GR_Zombie_Bomb_Mag") - 1);
+    }
+
+    //LogDebug("TEST : " + str(CheckInventory("CS163D_GR_Zombie_Bomb_Mag")));
+        
+    if(PlayerCount() > 2)
+        ACSa("PlayerSetTeam", pnum, TEAM_RED);
+    else if (PlayerCount() == 2 && !host)
+    {
+        int timmy;
+        for(int i = 0; i < 4; i++)
+        {
+            if(GetTeamProperty(i, TPROP_NumLivePlayers) >= 1 && GetPlayerInfo(pnum, PLAYERINFO_TEAM) != i)
+            {
+                timmy = i;
+                break;
+            }
+        }
+        ACSa("PlayerSetTeam", pnum, timmy);
+    }
+        
+    if(host)
+        PlayMuninya(); //Muninya honda.....
+    else
+        PlayMuninya_norm();
+        
+    if(!CSCheckInfection(pnum))
+    {
+        return ERR_NOT_SUCC;
+    }
+    LogDebug(__FUNCTION__ + " : Successfully infected " + str(pnum));
+    players[pnum].infected = true;
+    return pnum;
+}
+
+//@public
+//@summary [NOT FOR OFFICIAL USE] Cures a given pnum's player from zombie to human
+bool CSCurePlayer(int pnum) 
+{
+    if(!CheckPlayerNumber(pnum, __FUNCTION__))
+        return false;
+
+    // Checks if player is human
+    if(!CSCheckInfection(pnum))
+    {
+        LogWarning(__FUNCTION__ + " : Player " + str(Pnum) + " is already a human. Returning false.");
+        return false;
+    }
+    // If passed, continues to morph the one into muninya
+
+    SetActivatorToPlayer(pnum);
+
+    // Checks if the player is already dead or not.
+    if(!IsAlive())
+    {
+        LogWarning(__FUNCTION__ + " : Tried to cure a dead player " + str(pnum) + ". Returning false");
+        return false;
+    }
+
+    UnMorphActor(0);
+    TakeInventory(ITEM_ZOMBI_KNIFE_HOST, 1);
+    TakeInventory(ITEM_ZOMBI_KNIFE, 1);
+    TakeInventory(ITEM_ZOMBI_VISION, 1);
+    SetActorSpecies(0, CLASS_ZOMBI_SPECIES);
+    SetActorSpeed(0, CONST_CS16_OG_SPEED);
+    if(PlayerCount() > 2)
+        Player_SetTeam(TEAM_RED, false);
+    AmbientSound("loxin/jump/5", SND_VOLUME); // prezhock
+    return true;
+} 
+
+} // strict namespace {

@@ -1,0 +1,11 @@
+
+Script "ZombieBomb" (void)
+{
+    // Checks if the activator is zombie or not. If so, terminate.
+    If(StrCmp(GetActorClass(0), "CSOZombie") == 0 || StrCmp(GetActorClass(0), "CSOZombie_Host") == 0)
+    {
+        terminate;
+    }
+
+	CSInfectPlayer(PlayerNumber()); 
+}

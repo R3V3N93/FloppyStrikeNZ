@@ -1,0 +1,45 @@
+// Written in ACS.
+strict namespace {
+script "Molotov_Damage" (void)
+{
+	if(CSCheckInfection(GetPlayerNumberFromTid(ActivatorTid())))
+	{
+		LogDebug(__SCRIPT__ + " : Player " +  str(GetPlayerNumberFromTid(ActivatorTid())) + " Caught into flame");
+		if(CheckInventory("CS163D_Fire_Boolean"))
+			terminate;
+		GiveInventory("CS163D_Fire_Boolean", 1);
+
+		int oldtid = ActivatorTid();
+		int fire_tid = UniqueTID();
+		int pnum = GetPlayerNumberFromTid(oldtid);
+
+		if(!SpawnForced("CS163D_Fire", GetActorX(pnum), GetActorY(pnum), GetActorZ(pnum) + GetActorHeight(pnum) / 2.0, fire_tid))
+			LogError(StrParam(s:"Molotov_Damage : Fire actor not spawned!"));
+		
+		SetActivator(fire_tid);
+		if(!SetPointer(AAPTR_TARGET, oldtid))
+			LogError(StrParam(s:"Molotov_Damage : Failed to assign AAPTR_TARGET to the fire!"));
+
+		SetActivatorToPlayer(pnum);
+
+		for(int i = 0; i < 5; i++)
+		{
+			LogDebug(StrParam(s:"Molotov_Damage : Player " + str(pnum)));
+			LogDebug(StrParam(s:"Molotov_Damage : Speed = " + str(GetActorSpeed(oldtid))));
+			Thing_Damage2(oldtid, 25, "normal");
+			SetActorSpeed(oldtid, 0.15);
+			Delay(35);
+		}
+		Thing_Remove(fire_tid);
+		SetActorSpeed(oldtid, CONST_ZOMBIE_SPEED);
+		TakeInventory("CS163D_Fire_Boolean", 1);
+		LogDebug(StrParam(s:"Molotov_Damage : Finished"));
+		LogDebug(StrParam(s:"Molotov_Damage : Speed = " + str(GetActorSpeed(oldtid))));
+	}
+	else
+	{
+		LogDebug("Molotov_Damage : Activator " + str(GetPlayerNumberFromTid(ActivatorTid())) + " is not zombie. Terminating.");
+		terminate;
+	}
+}
+}

@@ -1,0 +1,37 @@
+
+
+strict namespace{
+
+enum CONSTS : str
+{
+    CLASS_ZOMBI_HOST = "CSOZOmbie_Host",
+    CLASS_ZOMBI = "CSOZOmbie",
+    ITEM_ZOMBI_KNIFE_HOST = "CSOZombieKnife",
+    ITEM_ZOMBI_KNIFE = "CSOZombieKnife_Normal",
+    ITEM_ZOMBI_VISION = "Zombieeye",
+
+    CLASS_ZOMBI_SPECIES = "CSZombie",
+    CLASS_HUMAN_SPECIES = "CSHuman",
+
+    SND_TRWON = "",
+    SND_CTWON = "",
+    SND_CONST_KLETSGO = "radio/voice/ct/9",
+    SND_CONST_ZBOMB_REGEN = "zombi_bomb_regen"
+};
+
+enum CONSTS_INT : int
+{
+    INIT_FREEZE_DURATION = 105, 
+    //tics
+    INIT_FREEZE_DURATION_OG = 20*35,
+     //tics
+    SND_VOLUME = 100
+};
+
+enum CONSTS_fixed : fixed
+{
+    CONST_CS16_OG_SPEED = 0.4,
+    CONST_ZOMBIE_SPEED = 0.5
+};
+
+}

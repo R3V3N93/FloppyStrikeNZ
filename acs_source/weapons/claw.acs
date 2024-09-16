@@ -1,0 +1,15 @@
+Script "GetInflictorName" (void)
+{
+    SetActivatorToTarget(0);
+    SetResultValue(PlayerName(PlayerNumber()));
+}
+
+//@public 
+//@summary Used in zombie claw weapons. Recommended to use this on serverside.
+Script "CSKnifeInfect" (void)
+{
+    str inflictor = StrParam(s:ACS_NamedExecuteWithResult("GetInflictorName"));
+    SetActivator(0, AAPTR_TRACER);
+    CSInfectPlayer(PlayerNumber(), false);
+}
+
