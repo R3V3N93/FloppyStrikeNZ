@@ -84,7 +84,7 @@ Script "player_main" ENTER
             }
             Delay(defTimer_Prep * 35);
             SetPlayerProperty(0, 0, PROP_FROZEN);
-            LogActivator(__SCRIPT__ + " : Unfrozen");
+            //LogActivator(__SCRIPT__ + " : Unfrozen");
             // If Bot
             if(PlayerIsBot(PlayerNumber()))
             {
@@ -113,7 +113,7 @@ Script "player_main" ENTER
                 if(game.state == CONST_GAMESTATE_BEGUN)
                 {
                     SetActorProperty(0, APROP_DamageFactor, 1.0);
-                    LogActivator(__SCRIPT__ + " : Disabled invincibility");
+                    //LogActivator(__SCRIPT__ + " : Disabled invincibility");
                     break;
                 }
                 delay(1); 

@@ -61,6 +61,7 @@ Script "buymenu" ENTER ClientSide
         if(GetState() == CONST_GAMESTATE_BEGUN)
 		{
 			ClearCSPrint();
+			CSBUy_Terminate();
             break;
 		}
 		
