@@ -2,7 +2,7 @@ strict namespace {
 Script "hud" ENTER ClientSide
 {
     SetDebugTypeQuantity(4);
-    if(!IsClient())
+    if(!IsClient() || PlayerNumber() != ConsolePlayerNumber())
         terminate;
     while(1)
     {

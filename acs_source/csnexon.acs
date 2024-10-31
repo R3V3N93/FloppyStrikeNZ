@@ -26,7 +26,7 @@
 #include "core/preprocessor.acs"
 
 #include "debug/debug.acs"
-//#include "debug/hud.acs"
+#include "debug/hud.acs"
 
 #include "maps/office/box.acs"
 #include "weapons/claw.acs"
