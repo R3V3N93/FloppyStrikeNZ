@@ -16,8 +16,8 @@ Script "CSSync" OPEN
 {
     While(1)
     {
-        SyncTime();
         delay(35);
+		SyncTime();
     }
 }
 
