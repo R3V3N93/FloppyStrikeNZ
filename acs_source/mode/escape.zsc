@@ -1,0 +1,12 @@
+strict namespace{
+
+bool fdm_ze_escaped = false;
+
+//@public
+//@summary A function for mappers to activate humans' escape sequence
+void CSEscape()
+{
+    fdm_ze_excaped = true;
+}
+
+}

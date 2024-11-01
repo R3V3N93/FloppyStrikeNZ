@@ -28,7 +28,6 @@
 #include "debug/debug.acs"
 #include "debug/hud.acs"
 
-#include "maps/office/box.acs"
 #include "weapons/claw.acs"
 #include "weapons/throwables/molotov.acs"
 #include "weapons/throwables/zbomb.acs"
@@ -274,6 +273,139 @@ Script "main" OPEN
                     }
                     AmbientSound(SND_CTWON, SND_VOLUME);
                     CSPrint("#Cstrike_TitlesTXT_HUMANs_Win");
+                }
+
+                
+                if(GetGameModeState() == GAMESTATE_INRESULTSEQUENCE)
+                {
+                    // This will happen if zombie wins.
+                    if(GetZombieCount() == PlayerCount())
+                    {
+                        //TODO : Figure out how to fix the victory brought about by impulsive team change via Player_SetTeam causing bugged victory, resulting in stuck.
+                        StopTimer();
+                        AmbientSound(SND_TRWON, SND_VOLUME);
+                        CSPrint("#Cstrike_TitlesTXT_ZOMBIEs_Win");
+                        //Exit_Normal(0);
+                        terminate;
+                    }
+                    // This will happen if human wins(most likely killing every zombies).
+                    AmbientSound(SND_CTWON, SND_VOLUME);
+                    CSPrint("#Cstrike_TitlesTXT_HUMANs_Win");
+                    //Exit_Normal(0);
+                    break;
+                }
+                delay(1);
+            }
+        case CSGM_ZE:
+            SetState(CONST_GAMESTATE_PREP);
+            if(GetGameModeState() == GAMESTATE_WAITFORPLAYERS || GetGameModeState() == GAMESTATE_COUNTDOWN)
+            { 
+                While(1)
+                {
+                    CSPrint("Waiting for the game to begin");
+                    delay(1);
+                }
+
+                LogDebug(__SCRIPT__ + " : Game is in preparation state. Cancelling the whole script.");
+                terminate;
+            }
+
+            if(GetGameModeState() == GAMESTATE_INPROGRESS)
+            {
+                SetState(CONST_GAMESTATE_BUY);
+                // Picks host zombies
+                game.hostnum = PlayerCount() / 10 + 1;
+            }
+            
+            SetTimer(CONST_TIMER_PREP);
+
+            AmbientSound(SND_CONST_KLETSGO, SND_VOLUME);
+
+            while(1)
+            {
+                // If Preparation timer is over, then it switches its gamestate to BEGUN.
+                // After that, the game picks host zombie.
+                if(game.timer <= 0)
+                {
+                    for(int i = 0; i < game.hostnum; i++)
+                    {
+                        while(1)
+                        {
+                            int temphost = random(0, MAX_PLAYERS - 1);
+                            if(!players[temphost].host && PlayerInGame(temphost))
+                            {
+                                players[temphost].host = true;
+                                LogDebug(__SCRIPT__ + " : Player " + str(i) + " has been selected as Host Zombie");
+                                break;
+                            }
+                        } // It shouldn't get stuck in infinite loop in formal way..
+                    }
+
+                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    {
+                        if(players[i].host == true)
+                        {   
+                            int caught = CSInfectPlayer(i, true);
+                            if(caught == -1)
+                            {
+                                KillSwitch("given pnum " + str(i) + " is not a player... FOR SOME REASON!", ERR_NOT_PLAYER);
+                                terminate;
+                            }
+                            else if(caught == -2)
+                            {
+                                KillSwitch("given pnum " + str(i) + " is already a zombie... FOR SOME REASON!", ERR_ALREADY_ZOMBIE);
+                                terminate;
+                            }
+                            else if(caught == -4)
+                            {
+                                KillSwitch("Couldn't infect the player " + str(i) + " Successfully!", ERR_NOT_SUCC);
+                                terminate;
+                            }
+                            else if(caught == -3)
+                                LogDebug(__SCRIPT__ + " : Player " + str(i) + " is dead. Canceling his host zombie transformation");
+                            else
+                                LogDebug(__SCRIPT__ + " : Player " + str(i) + " has turned to Host Zombie");
+                        }
+                        else
+                        {
+                            if(PlayerCount() > 2)
+                                ACSa("PlayerSetTeam", i, TEAM_BLUE);
+                        }
+                    }
+
+                    // Checks for innocent survivors who became host zombies for some reason.
+                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    {
+                        if(!players[i].host && players[i].infected)
+                        {
+                            KillSwitch("given pnum " + str(i) + " is a innocent survivor!", EXCEPTION_WRONG_HOST);
+                            terminate;
+                        }
+                    }
+                    // Picking host zombies ends
+                    SetActivatorToPlayer(-1);
+                    break;
+                }
+                delay(1);
+            }
+
+            SetState(CONST_GAMESTATE_BEGUN);
+
+            while(1)
+            {
+                // If timer is over, The code kills every zombies, so that the blue team can win
+                if(fdm_ze_escaped)
+                {
+                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    {
+                        if(players[i].infected)
+                        {
+                            Thing_Damage2(GetPlayerTid(i), 100000, "normal");
+                        }
+                    }
+                    AmbientSound(SND_CTWON, SND_VOLUME);
+                    CSPrint("#Cstrike_TitlesTXT_HUMANs_Escaped");
+                    terminate;
                 }
 
                 
