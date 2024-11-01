@@ -84,9 +84,9 @@ Script "CSTimer" (int time)
 {
     for(int i = 0; i < time; i++)
     {   
-        if(game.timer >= 1 && game.timer <= 5 && game.timertype == CONST_TIMER_PREP && game.mode == CSGM_ZM)
+        if(game.timer >= 1 && game.timer <= 10 && game.timertype == CONST_TIMER_PREP && game.mode == CSGM_ZM)
         {
-            AmbientSound("vox_" + str(game.timer), SND_VOLUME);
+            AmbientSound("sounds/Background/vox_" + str(game.timer) + ".wav", SND_VOLUME);
         }
         delay(35);
         game.timer--;
