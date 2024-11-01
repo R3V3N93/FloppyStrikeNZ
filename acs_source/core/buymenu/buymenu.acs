@@ -5,13 +5,9 @@
 strict namespace
 {
 
-Script "buymenu" ENTER ClientSide
+void CSBuyMenuConfig()
 {
-	if(PlayerNumber() != ConsolePlayerNumber())
-        terminate; 
-		
-	delay(5);
-    CSBuy_BuymenuSetup("integar", "calibri");
+	CSBuy_BuymenuSetup("integar", "calibri");
     CSBuy_AddSlot(1, 1);
     CSBuy_AddSlot(2, 1);
     CSBuy_AddSlot(4, 2);
@@ -46,7 +42,15 @@ Script "buymenu" ENTER ClientSide
 	CSBuy_AddWeapon(8, "HE Grenade", "CS163D_GR_HEGRENADE", 0, CS_WEAP_DESC_HEGRENADE, "hegren", false);
 	if(game.mode == CSGM_ZM)
 		CSBuy_AddWeapon(8, "Molotov", "CS163D_GR_Molotov", 0, CS_WEAP_DESC_MOLOTOV, "moltov", false);
+}
 
+Script "buymenu" ENTER ClientSide
+{
+	if(PlayerNumber() != ConsolePlayerNumber())
+        terminate; 
+		
+	delay(5);
+	CSBuyMenuConfig();
     while(1)
     {
         if(GetState() == CONST_GAMESTATE_BUY)
@@ -61,7 +65,7 @@ Script "buymenu" ENTER ClientSide
         if(GetState() == CONST_GAMESTATE_BEGUN)
 		{
 			ClearCSPrint();
-			CSBUy_Terminate();
+			CSBuy_Terminate();
             break;
 		}
 		
