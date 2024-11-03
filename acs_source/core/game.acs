@@ -2,7 +2,7 @@
 
 strict namespace {
 
-enum DefaultTime : int
+private enum DefaultTime : int
 {
     CONST_PREPARE_TIME_DEFAULT = 20,
     CONST_GAME_TIME_DEFAULT = 180
@@ -19,7 +19,7 @@ enum GAMESTATE : int
 int defTimer_Prep = CONST_PREPARE_TIME_DEFAULT;
 int defTimer_Game = CONST_GAME_TIME_DEFAULT;
 
-enum TIMERNAME : int
+private enum TIMERNAME : int
 {
     CONST_TIMER_PREP = 0x01,
     CONST_TIMER_GAME = 0x02
@@ -29,6 +29,7 @@ enum GAMEMODE : int
 {
     CSGM_OG,
     CSGM_ZM,
+    CSGM_ZE,
     CSGM_DEV
 };
 

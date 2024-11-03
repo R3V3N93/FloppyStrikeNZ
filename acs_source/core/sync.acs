@@ -1,6 +1,6 @@
 strict namespace {
 
-enum CS_SYNC : int
+private enum CS_SYNC : int
 {
     SYNC_STATE = 8900,
     SYNC_TIME = 8901,

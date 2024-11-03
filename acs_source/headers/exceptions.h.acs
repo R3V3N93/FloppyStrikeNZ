@@ -1,5 +1,5 @@
 
-enum EXCEPTION : int
+private enum EXCEPTION : int
 {
     EXCEPTION_PREP = 0x01,
 

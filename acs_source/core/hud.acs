@@ -4,7 +4,7 @@ strict namespace{
 
 // YEAH BITCH! HARD CODING!
 
-enum : fixed { 
+private enum : fixed { 
   CSHUD_HEALTH_X_PROPORTION = 0.0067708333,//fixed(13 / int(1920.0)),
   CSHUD_ARMOUR_X_PROPORTION = 0.201041666, //fixed(386.0 / 1920.0),
   CSHUD_TIMER_X_1_PROPORTION = 0.4671875,//fixed(897.0 / 1920.0),

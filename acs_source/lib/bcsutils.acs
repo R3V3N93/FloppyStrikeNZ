@@ -72,9 +72,9 @@ ACSUtils uses code from ACS-X:
 // have been put into an array.
 strict namespace {
 
-enum : int { ACSUTILS_VERSION_MAJOR = 1 };
-enum : int { ACSUTILS_VERSION_MINOR = 8 };
-enum : int { ACSUTILS_VERSION_PATCH = 2 };
+private enum : int { ACSUTILS_VERSION_MAJOR = 1 };
+private enum : int { ACSUTILS_VERSION_MINOR = 8 };
+private enum : int { ACSUTILS_VERSION_PATCH = 2 };
 
  
 function str ACSUtilsVersion(void)
@@ -89,21 +89,21 @@ function str ACSUtilsVersion(void)
 // Multiple return values.
 raw r1, r2, r3, r4, r5, r6, r7, r8;
 
-enum : fixed { HUDTIC = 0.03 };
-enum : fixed { HUD_STAYTIME_FOREVER = (fixed)(-1) };
+private enum : fixed { HUDTIC = 0.03 };
+private enum : fixed { HUD_STAYTIME_FOREVER = (fixed)(-1) };
 
-enum : int { HUD_BLENDSTYLE_NORMAL = 0 };
-enum : int { HUD_BLENDSTYLE_ADDITIVE = 1 };
+private enum : int { HUD_BLENDSTYLE_NORMAL = 0 };
+private enum : int { HUD_BLENDSTYLE_ADDITIVE = 1 };
 
-enum : int { HUD_ALIGN_CENTER = 0 };
-enum : int { HUD_ALIGN_LEFT = 1 };
-enum : int { HUD_ALIGN_RIGHT = 2 };
-enum : int { HUD_ALIGN_TOP = 1 };
-enum : int { HUD_ALIGN_BOTTOM = 2 };
+private enum : int { HUD_ALIGN_CENTER = 0 };
+private enum : int { HUD_ALIGN_LEFT = 1 };
+private enum : int { HUD_ALIGN_RIGHT = 2 };
+private enum : int { HUD_ALIGN_TOP = 1 };
+private enum : int { HUD_ALIGN_BOTTOM = 2 };
 
-enum : int { HUD_PROJECTION_AUTO = 0 };
-enum : int { HUD_PROJECTION_3D = 1 };
-enum : int { HUD_PROJECTION_YSHEARING = 2 };
+private enum : int { HUD_PROJECTION_AUTO = 0 };
+private enum : int { HUD_PROJECTION_3D = 1 };
+private enum : int { HUD_PROJECTION_YSHEARING = 2 };
 
 raw ACSUtils_Ints[55] = {
 	240.0, // CursorY
@@ -201,21 +201,21 @@ function void ACSUtils_ErrorHandler(int type, str message)
 
 	printbold(s:text);
 }
-enum : fixed { FIXED_MAX = (fixed)(0x7fffffff) };
-enum : fixed { FIXED_MIN = (fixed)(0x80000000) };
-enum : int { USHORT_MAX = 65535 };
-enum : int { SHORT_MAX = 32767 };
-enum : int { SHORT_MIN = -32768 };
-enum : int { UBYTE_MAX = 255 };
-enum : int { SBYTE_MAX = 127 };
-enum : int { SBYTE_MIN = -128 };
+private enum : fixed { FIXED_MAX = (fixed)(0x7fffffff) };
+private enum : fixed { FIXED_MIN = (fixed)(0x80000000) };
+private enum : int { USHORT_MAX = 65535 };
+private enum : int { SHORT_MAX = 32767 };
+private enum : int { SHORT_MIN = -32768 };
+private enum : int { UBYTE_MAX = 255 };
+private enum : int { SBYTE_MAX = 127 };
+private enum : int { SBYTE_MIN = -128 };
 
-enum : fixed { PI = 3.1415926535897932384626433832795 };
-enum : fixed { TAU = 6.2831853071795864769252867665590 };
-enum : fixed { SQRT_2 = 1.41421356237 };
-enum : fixed { MATH_E = 2.7182818284590452353602874713526624977572470937 };
-enum : fixed { LOG2_E = 1.44269504089 };
-enum : fixed { LOG2_10 = 3.32192809489 };
+private enum : fixed { PI = 3.1415926535897932384626433832795 };
+private enum : fixed { TAU = 6.2831853071795864769252867665590 };
+private enum : fixed { SQRT_2 = 1.41421356237 };
+private enum : fixed { MATH_E = 2.7182818284590452353602874713526624977572470937 };
+private enum : fixed { LOG2_E = 1.44269504089 };
+private enum : fixed { LOG2_10 = 3.32192809489 };
 
 // Generic functions.
 
@@ -973,7 +973,7 @@ function void normalize3d(fixed x, fixed y, fixed z)
 	r3 = FixedDiv(z, l);
 }
 
-enum : int { COLORCODE = 28 };
+private enum : int { COLORCODE = 28 };
 
 private enum : int { ACSUTILS_ISALNUM = 1<<0 };
 private enum : int { ACSUTILS_ISALPHA = 1<<1 };
@@ -1955,9 +1955,9 @@ function str StripColorCodes(str s)
 	return result;
 }
 
-enum : int { MAX_PLAYERS = 64 };
-enum : int { MAX_PLAYERS_ZDOOM = 8 };
-enum : int { TEAM_NONE = 255 };
+private enum : int { MAX_PLAYERS = 64 };
+private enum : int { MAX_PLAYERS_ZDOOM = 8 };
+private enum : int { TEAM_NONE = 255 };
 
 // Inventory functions.
 
@@ -2563,9 +2563,9 @@ function fixed jumpz2height(fixed jumpz, fixed gravity)
 	return (fixed)((int)(FixedDiv(FixedMul(jumpz, jumpz), gravity)) / 2);
 }
 
-enum : int { PARSENUMBER_SUCCESS = 0 };
-enum : int { PARSENUMBER_OVERFLOW = 1 };
-enum : int { PARSENUMBER_BADFORMAT = 2 };
+private enum : int { PARSENUMBER_SUCCESS = 0 };
+private enum : int { PARSENUMBER_OVERFLOW = 1 };
+private enum : int { PARSENUMBER_BADFORMAT = 2 };
 
  
 function int ACSUtils_CheckRadix(int radix, str functionName)
@@ -3719,9 +3719,9 @@ function void UpdateCursor(void)
 	ACSUtils_ClampCursor();
 }
 
-enum : int { PORT_ZDOOM = 1 };
-enum : int { PORT_GZDOOM = 2 };
-enum : int { PORT_ZANDRONUM = 3 };
+private enum : int { PORT_ZDOOM = 1 };
+private enum : int { PORT_GZDOOM = 2 };
+private enum : int { PORT_ZANDRONUM = 3 };
 
 
 
@@ -3836,11 +3836,11 @@ function bool IsOpenGL(void)
 // Interface 
 
 // BCC type
-enum : fixed { ASPECT_4_3 = (fixed)((int)(4.0) / 3) };
-enum : fixed { ASPECT_5_4 = 1.25 };
-enum : fixed { ASPECT_16_9 = (fixed)((int)(16.0) / 9) };
-enum : fixed { ASPECT_16_10 = 1.6 };
-enum : fixed { ASPECT_17_10 = 1.7 };
+private enum : fixed { ASPECT_4_3 = (fixed)((int)(4.0) / 3) };
+private enum : fixed { ASPECT_5_4 = 1.25 };
+private enum : fixed { ASPECT_16_9 = (fixed)((int)(16.0) / 9) };
+private enum : fixed { ASPECT_16_10 = 1.6 };
+private enum : fixed { ASPECT_17_10 = 1.7 };
 
  
 function fixed GetAspectRatio(void)
@@ -4393,10 +4393,10 @@ function void HudSetCameraVector(fixed x, fixed y, fixed z)
 }
 
 
-enum : int { HUD_CAMERAACTOR_NOPOSITION = 1 };
-enum : int { HUD_CAMERAACTOR_NOPREDICTION = 2 };
-enum : int { HUD_CAMERAACTOR_NODIRECTION = 4 };
-enum : int { HUD_CAMERAACTOR_NOVIEWHEIGHT = 8 };
+private enum : int { HUD_CAMERAACTOR_NOPOSITION = 1 };
+private enum : int { HUD_CAMERAACTOR_NOPREDICTION = 2 };
+private enum : int { HUD_CAMERAACTOR_NODIRECTION = 4 };
+private enum : int { HUD_CAMERAACTOR_NOVIEWHEIGHT = 8 };
 
  
 function void HudSetCameraActorAdvanced(int tid, int flags)
@@ -4780,7 +4780,7 @@ function int HudGetDistance(void)
 }
 
 
-enum : int { CAMERA_BASE_DISTANCE = 128 };
+private enum : int { CAMERA_BASE_DISTANCE = 128 };
 
  
 function void ACSUtils_HudDrawHudMessage(int id, int type, str text, bool isText)

@@ -1,5 +1,5 @@
 strict namespace {
-enum WEAPONS : int
+    private enum WEAPONS : int
 {
     CONST_WEAPONS_NOTSUPP = 0,
     CONST_WEAPONS_HG = 1, // Pistols
@@ -12,7 +12,7 @@ enum WEAPONS : int
     CONST_WEAPONS_TYPES_AMOUNT = 6
 };
 
-enum WEAPONS_str : str
+private enum WEAPONS_str : str
 {
     CONST_WEAPONS_PREFIX = "CS163d_",
     CONST_WEAPONS_TYPE_HG = "CS163d_HG",

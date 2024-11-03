@@ -31,6 +31,9 @@
 #include "weapons/claw.acs"
 #include "weapons/throwables/molotov.acs"
 #include "weapons/throwables/zbomb.acs"
+
+#include "acs_source_public/advtele.g.acs"
+#include "mode/escape.acs"
 #import "acs/extradata/ex_speci.acs"
 
 // GLOBAL TODO
@@ -96,6 +99,7 @@ Script "player_main" ENTER
                     GiveInventory("CS163D_RF_M4A1", 1);
             }
             break;
+        case CSGM_ZE:
         case CSGM_ZM:
             SetActorProperty(0, APROP_DamageFactor, 0.0);
             GiveInventory("CS163D_HG_USP", 1);
@@ -346,6 +350,9 @@ Script "main" OPEN
                         if(players[i].host == true)
                         {   
                             int caught = CSInfectPlayer(i, true);
+
+                            
+
                             if(caught == -1)
                             {
                                 KillSwitch("given pnum " + str(i) + " is not a player... FOR SOME REASON!", ERR_NOT_PLAYER);

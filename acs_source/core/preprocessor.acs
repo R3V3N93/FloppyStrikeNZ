@@ -10,6 +10,8 @@ function int CSGameMode()
         return CSGM_ZM;
     else if(StrParam(l:"CS_GAMEMODE_" + StrParam(n:PRINTNAME_LEVEL)) == "DEV")
         return CSGM_DEV;
+    else if(StrParam(l:"CS_GAMEMODE_" + StrParam(n:PRINTNAME_LEVEL)) == "ZE")
+        return CSGM_ZE;
     
     return -1;
 }
@@ -45,7 +47,7 @@ Script "PreProcessor" OPEN
     }
 
     game.map = CSMapName();
-    if(game.map == "")
+    if(game.map == "CS_MAPNAME_" + StrParam(n:PRINTNAME_LEVEL))
         game.map = "JUST_ANOTHER_COUNTER_STRIKE_MAP";
     
     defTimer_Game = CSDefaultTimer_Game();
@@ -64,7 +66,7 @@ Script "PreProcessor" OPEN
     LogDebug("\n" + __SCRIPT__ + " : \ngame.map = " + game.map + "\ngame.mode = " + str(game.mode) + "\ndefTimer_Game = " + str(defTimer_Game) + "\ndefTimer_Prep = " + str(defTimer_Prep) + "\n");
 
     game.author = CSMapAuthor();
-    if(game.map == "")
+    if(game.map == "CS_AUTHOR_" + StrParam(n:PRINTNAME_LEVEL))
         game.map = "UNKNOWN_AUTHOR";
 }
 

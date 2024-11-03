@@ -1,4 +1,4 @@
-enum WEAP_DESCRIPTION : str
+private enum WEAP_DESCRIPTION : str
 {
 	// PISTOL
 	CS_WEAP_DESC_GLOCK = "
