@@ -1,0 +1,26 @@
+strict namespace{
+
+bool fdm_ze_escaped = false;
+
+//@public
+//@summary A function for mappers to activate humans' escape sequence
+function void CSEscape()
+{
+    fdm_ze_escaped = true;
+}
+
+//@public
+//@summary A function which returns the sector tag of the sector where zombie spawns in the beginning
+function int CSgetZombieSpawnPointTag()
+{
+    return 666666;
+}
+
+//@public
+//@summary moves specified pnum to the zombie's starting point
+function void CSmoveZombieToStart(int pnum)
+{
+
+}
+
+}
