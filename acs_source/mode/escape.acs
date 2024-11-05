@@ -11,16 +11,47 @@ function void CSEscape()
 
 //@public
 //@summary A function which returns the sector tag of the sector where zombie spawns in the beginning
-function int CSgetZombieSpawnPointTag()
+function int CSgetZombieSpawnPointTid(int order)
 {
-    return 666666;
+    if(order > game.hostnum || order < 1)
+    {
+        return -1;
+    }
+    return 666666 * 10 + order;
+}
+
+Script "CS_pls_Set_Starting_Point_Tid" (void)
+{
+    if(game.state == CONST_GAMESTATE_PREP)
+    {
+        terminate;
+    }
+    delay(2); //makes sures game.hostnum is properly set
+
+    int curtid;
+    for(int i = 1; i <= game.hostnum; i++)
+    {
+        curtid = 666666 * 10 + i;
+        if(!IsTIDUsed(curtid))
+            break;
+    }
+    LogDebug(__SCRIPT__ + " : Set this starting point's tid to " + str(curtid));
+    Thing_ChangeTID(0, curtid);
 }
 
 //@public
 //@summary moves specified pnum to the zombie's starting point
 function void CSmoveZombieToStart(int pnum)
 {
-
+    for(int i = 1; i <= game.hostnum; i++)
+    {
+        int a = CSgetZombieSpawnPointTid(i);
+        if(Warp(a, 0, 0, 0, GetActorAngle(a), WARPF_STOP))
+        {
+            LogDebug(__FUNCTION__ + " : Moved host zombie " + str(StrParam(n:str(pnum))) + "(" + str(pnum)") to zombie escape starting point");
+            break;
+        }
+    }
 }
 
 }

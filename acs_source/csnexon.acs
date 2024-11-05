@@ -138,22 +138,22 @@ Script "player_main" ENTER
 Script "main" OPEN
 {
     delay(1);
+    if(GetGameModeState() == GAMESTATE_WAITFORPLAYERS || GetGameModeState() == GAMESTATE_COUNTDOWN)
+    { 
+        SetState(CONST_GAMESTATE_PREP);
+        While(1)
+        {
+            CSPrint("Waiting for the game to begin");
+            delay(1);
+        }
+
+        LogDebug(__SCRIPT__ + " : Game is in preparation state. Cancelling the whole script.");
+        terminate;
+    }
+
     switch(game.mode)
     {
         case CSGM_OG:
-            SetState(CONST_GAMESTATE_PREP);
-            if(GetGameModeState() == GAMESTATE_WAITFORPLAYERS || GetGameModeState() == GAMESTATE_COUNTDOWN)
-            { 
-                While(1)
-                {
-                    CSPrint("Waiting for the game to begin");
-                    delay(1);
-                }
-
-                LogDebug(__SCRIPT__ + " : Game is in preparation state. Cancelling the whole script.");
-                terminate;
-            }
-
             if(GetGameModeState() == GAMESTATE_INPROGRESS)
             {
                 SetState(CONST_GAMESTATE_BUY);
@@ -168,19 +168,6 @@ Script "main" OPEN
             SetState(CONST_GAMESTATE_BEGUN);
             break;
         case CSGM_ZM:
-            SetState(CONST_GAMESTATE_PREP);
-            if(GetGameModeState() == GAMESTATE_WAITFORPLAYERS || GetGameModeState() == GAMESTATE_COUNTDOWN)
-            { 
-                While(1)
-                {
-                    CSPrint("Waiting for the game to begin");
-                    delay(1);
-                }
-
-                LogDebug(__SCRIPT__ + " : Game is in preparation state. Cancelling the whole script.");
-                terminate;
-            }
-
             if(GetGameModeState() == GAMESTATE_INPROGRESS)
             {
                 SetState(CONST_GAMESTATE_BUY);
@@ -301,19 +288,6 @@ Script "main" OPEN
                 delay(1);
             }
         case CSGM_ZE:
-            SetState(CONST_GAMESTATE_PREP);
-            if(GetGameModeState() == GAMESTATE_WAITFORPLAYERS || GetGameModeState() == GAMESTATE_COUNTDOWN)
-            { 
-                While(1)
-                {
-                    CSPrint("Waiting for the game to begin");
-                    delay(1);
-                }
-
-                LogDebug(__SCRIPT__ + " : Game is in preparation state. Cancelling the whole script.");
-                terminate;
-            }
-
             if(GetGameModeState() == GAMESTATE_INPROGRESS)
             {
                 SetState(CONST_GAMESTATE_BUY);
@@ -351,7 +325,7 @@ Script "main" OPEN
                         {   
                             int caught = CSInfectPlayer(i, true);
 
-                            
+                            CSmoveZombieToStart(i);
 
                             if(caught == -1)
                             {
