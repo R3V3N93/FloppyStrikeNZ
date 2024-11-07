@@ -10,7 +10,7 @@ function void CSEscape()
 }
 
 //@public
-//@summary A function which returns the sector tag of the sector where zombie spawns in the beginning
+//@summary A function which returns the actor tid of the sector where zombie spawns in the beginning
 function int CSgetZombieSpawnPointTid(int order)
 {
     if(order > game.hostnum || order < 1)
