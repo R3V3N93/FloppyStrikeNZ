@@ -20,6 +20,7 @@ function int CSgetZombieSpawnPointTid(int order)
     return 666666 * 10 + order;
 }
 
+/*
 Script "CS_pls_Set_Starting_Point_Tid" (void)
 {
     if(game.state == CONST_GAMESTATE_PREP)
@@ -37,7 +38,7 @@ Script "CS_pls_Set_Starting_Point_Tid" (void)
     }
     LogDebug(__SCRIPT__ + " : Set this starting point's tid to " + str(curtid));
     Thing_ChangeTID(0, curtid);
-}
+}*/
 
 //@public
 //@summary moves specified pnum to the zombie's starting point
