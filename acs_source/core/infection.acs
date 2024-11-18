@@ -76,6 +76,33 @@ function bool CSCheckInfection(int pnum)
     return true;
 }
 
+//@public
+function bool IsZombie(int pnum, bool host)
+{
+    if(!CheckPlayerNumber(pnum, __FUNCTION__))
+    {
+        LogWarning(__FUNCTION__ + " : Given playernumber " + str(pnum) + " is not a valid player");
+        return false;
+    }
+
+    // Checks if the player is already dead or not.
+    if(!ActorIsAlive(GetPlayerTid(pnum)))
+    {
+        LogWarning(__FUNCTION__ + " : Given plyaernumber " + str(pnum) + " is not alive");
+        return false;
+    }
+
+    if(players[pnum].infected)
+    {
+        if(host && !players[pnum].host)
+            return false;
+
+        return true;
+    }
+
+    return false;
+}
+
 Script "PlayerSetTeam" (int pnum, int team)
 {
     if(!CheckPlayerNumber(pnum, __SCRIPT__))
