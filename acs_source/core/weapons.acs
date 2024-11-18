@@ -1,5 +1,5 @@
 strict namespace {
-    private enum WEAPONS : int
+enum WEAPONS : int
 {
     CONST_WEAPONS_NOTSUPP = 0,
     CONST_WEAPONS_HG = 1, // Pistols
