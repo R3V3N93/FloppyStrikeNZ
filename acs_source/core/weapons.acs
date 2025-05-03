@@ -12,7 +12,7 @@ enum WEAPONS : int
     CONST_WEAPONS_TYPES_AMOUNT = 6
 };
 
-private enum WEAPONS_str : str
+internal enum WEAPONS_str : str
 {
     CONST_WEAPONS_PREFIX = "CS163d_",
     CONST_WEAPONS_TYPE_HG = "CS163d_HG",

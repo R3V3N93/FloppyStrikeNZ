@@ -121,7 +121,7 @@ Script "PlayerSetTeam" (int pnum, int team)
     terminate;
 }
 
-private enum ERR_CODE : int
+internal enum ERR_CODE : int
 {
     ERR_NOT_PLAYER = -1,
     ERR_ALREADY_ZOMBIE = -2,
