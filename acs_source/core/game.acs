@@ -2,7 +2,7 @@
 
 strict namespace {
 
-internal enum DefaultTime : int
+private enum DefaultTime : int
 {
     CONST_PREPARE_TIME_DEFAULT = 20,
     CONST_GAME_TIME_DEFAULT = 180
@@ -19,7 +19,7 @@ enum GAMESTATE : int
 int defTimer_Prep = CONST_PREPARE_TIME_DEFAULT;
 int defTimer_Game = CONST_GAME_TIME_DEFAULT;
 
-internal enum TIMERNAME : int
+private enum TIMERNAME : int
 {
     CONST_TIMER_PREP = 0x01,
     CONST_TIMER_GAME = 0x02
@@ -55,7 +55,7 @@ struct gameinfo game;
 void SetState(int state)
 {
     game.state = state;
-    SyncVariable(SYNC_STATE, game.state);
+    BCSUTILS::SyncVariable(SYNC_STATE, game.state);
     LogDebug(__FUNCTION__ + " : game.state has been changed to " + str(game.state));
     return;
 }
@@ -105,7 +105,7 @@ function void ClearCSPrint()
 
 function void CSPrint_BareBone(str what)
 {
-    int x = (GetAspectRatio() != ASPECT_4_3 ? GetScreenWidth() * 3/4 : GetScreenWidth());
+    int x = (BCSUTILS::GetAspectRatio() != BCSUTILS::ASPECT_4_3 ? GetScreenWidth() * 3/4 : GetScreenWidth());
     int y = GetScreenHeight();
     //print(d:x, s:" ", d:y);
     SetHUDSize(x, y, true);
@@ -119,7 +119,7 @@ function void CSPrint_BareBone(str what)
 //@public
 function void CSPrint(str what)
 {
-    if(!IsClient())
+    if(!BCSUTILS::IsClient())
     {
         NamedSendNetworkString("CSPrint_script", what, -1);
         //SyncVariableSTR(SYNC_CSPRINT, what);

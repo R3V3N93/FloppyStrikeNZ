@@ -1,6 +1,6 @@
 strict namespace {
 
-internal enum CS_SYNC : int
+private enum CS_SYNC : int
 {
     SYNC_STATE = 8900,
     SYNC_TIME = 8901,
@@ -9,7 +9,7 @@ internal enum CS_SYNC : int
 
 function void SyncTime()
 { 
-    SyncVariable(SYNC_TIME, game.timer);
+    BCSUTILS::SyncVariable(SYNC_TIME, game.timer);
 }
 
 Script "CSSync" OPEN
@@ -28,7 +28,7 @@ function void SyncVariableSTR(int tid, str value)
 	{
 		if (!SpawnForced("ACSUtils_Sync", 0.0, 0.0, 0.0, tid))	
 		{
-			ACSUtils_ProgramError(StrParam
+			BCSUTILS::ACSUtils_ProgramError(StrParam
 			(
 				s:"Failed to spawn sync actor for tid ", d:tid, s:". ",
 				s:"Make sure you copied \cjdecorate.acsutils \c-to your project."
@@ -47,12 +47,12 @@ function int GetSyncSTR(int tid)
 
 function int GetState()
 {
-    return GetSyncVar(SYNC_STATE);
+    return BCSUTILS::GetSyncVar(SYNC_STATE);
 }
 
 function int GetTimer()
 {
-    return GetSyncVar(SYNC_TIME);
+    return BCSUTILS::GetSyncVar(SYNC_TIME);
 }
 
 }

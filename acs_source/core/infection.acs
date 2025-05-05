@@ -21,7 +21,7 @@ void PlayMuninya_norm(void)
 function int GetZombieCount()
 {
     int amount;
-    for(int i = 0; i < MAX_PLAYERS; i++)
+    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
     {
         if(players[i].infected && players[i].alive)
             amount++;
@@ -37,7 +37,7 @@ function bool CSCheckInfection(int pnum)
         return false;
 
     // Checks if the player is already dead or not.
-    if(!ActorIsAlive(GetPlayerTid(pnum)))
+    if(!BCSUTILS::ActorIsAlive(GetPlayerTid(pnum)))
     {
         LogDebug(__FUNCTION__ + " : False returned from death/spectator from player " + str(pnum));
         return false;
@@ -66,7 +66,7 @@ function bool CSCheckInfection(int pnum)
     }
 
     // Checks if the activator's species is appropriate
-    if(GetActorSpecies(GetPlayerTid(pnum)) != CLASS_ZOMBI_SPECIES)
+    if(BCSUTILS::GetActorSpecies(GetPlayerTid(pnum)) != CLASS_ZOMBI_SPECIES)
     {
         LogDebug(__FUNCTION__ + " : False returned from species from player " + str(pnum));
         return false;
@@ -86,7 +86,7 @@ function bool IsZombie(int pnum, bool host)
     }
 
     // Checks if the player is already dead or not.
-    if(!ActorIsAlive(GetPlayerTid(pnum)))
+    if(!BCSUTILS::ActorIsAlive(GetPlayerTid(pnum)))
     {
         LogWarning(__FUNCTION__ + " : Given plyaernumber " + str(pnum) + " is not alive");
         return false;
@@ -121,7 +121,7 @@ Script "PlayerSetTeam" (int pnum, int team)
     terminate;
 }
 
-internal enum ERR_CODE : int
+private enum ERR_CODE : int
 {
     ERR_NOT_PLAYER = -1,
     ERR_ALREADY_ZOMBIE = -2,
@@ -145,7 +145,7 @@ int CSInfectPlayer(int pnum, bool host = false)
     // If passed, continues to morph the one into muninya
 
     // Checks if the player is already dead or not.
-    if(!ActorIsAlive(GetPlayerTid(pnum)))
+    if(!BCSUTILS::ActorIsAlive(GetPlayerTid(pnum)))
     {
         LogWarning(__FUNCTION__ + " : Tried to infect a dead player " + str(pnum) + ". Returning false");
         return ERR_NOT_ALIVE;
@@ -213,7 +213,7 @@ bool CSCurePlayer(int pnum)
     SetActivatorToPlayer(pnum);
 
     // Checks if the player is already dead or not.
-    if(!IsAlive())
+    if(!BCSUTILS::IsAlive())
     {
         LogWarning(__FUNCTION__ + " : Tried to cure a dead player " + str(pnum) + ". Returning false");
         return false;
@@ -223,8 +223,8 @@ bool CSCurePlayer(int pnum)
     TakeInventory(ITEM_ZOMBI_KNIFE_HOST, 1);
     TakeInventory(ITEM_ZOMBI_KNIFE, 1);
     TakeInventory(ITEM_ZOMBI_VISION, 1);
-    SetActorSpecies(0, CLASS_ZOMBI_SPECIES);
-    SetActorSpeed(0, CONST_CS16_OG_SPEED);
+    BCSUTILS::SetActorSpecies(0, CLASS_ZOMBI_SPECIES);
+    BCSUTILS::SetActorSpeed(0, CONST_CS16_OG_SPEED);
     if(PlayerCount() > 2)
         Player_SetTeam(TEAM_RED, false);
     AmbientSound("loxin/jump/5", SND_VOLUME); // prezhock

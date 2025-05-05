@@ -4,7 +4,7 @@ strict namespace{
 
 // YEAH BITCH! HARD CODING!
 
-internal enum : fixed { 
+private enum : fixed { 
   CSHUD_HEALTH_X_PROPORTION = 0.0067708333,//fixed(13 / int(1920.0)),
   CSHUD_ARMOUR_X_PROPORTION = 0.201041666, //fixed(386.0 / 1920.0),
   CSHUD_TIMER_X_1_PROPORTION = 0.4671875,//fixed(897.0 / 1920.0),
@@ -18,37 +18,37 @@ internal enum : fixed {
 fixed CSHudXCoord(fixed proportion, fixed pivot = 0.1)
 {
     // If aspect ratio is not 3:4, deducts 'border' value from the position. zdoom restriction bullshit.
-    fixed side_border = (GetAspectRatio() != ASPECT_4_3 ? fixed(((int)GetScreenWidth() - ((int)GetScreenWidth() * 3/4)) / 2)  : 0.0);
-    return customceil(proportion * fixed((int)GetScreenWidth())) - side_border + pivot;
+    fixed side_border = (BCSUTILS::GetAspectRatio() != BCSUTILS::ASPECT_4_3 ? fixed(((int)GetScreenWidth() - ((int)GetScreenWidth() * 3/4)) / 2)  : 0.0);
+    return BCSUTILS::customceil(proportion * fixed((int)GetScreenWidth())) - side_border + pivot;
 }
 
 // Scales the given coordinate, which should be based on 1920*1080 to be appropriate for current height.
 function fixed CSHudScaleYCoord(fixed coordinate)
 {
-    fixed temp = customceil(coordinate * fixed(GetScreenHeight()) / 1080.0) + 0.1;
-    print(f:temp, s:" ", f:customceil(coordinate * fixed(GetScreenHeight()) / 1080.0), s:" ", f:coordinate * fixed(GetScreenHeight()) / 1080.0, s:" ", f:coordinate * fixed((int)GetScreenHeight()) / 1080.0);
+    fixed temp = BCSUTILS::customceil(coordinate * fixed(GetScreenHeight()) / 1080.0) + 0.1;
+    print(f:temp, s:" ", f:BCSUTILS::customceil(coordinate * fixed(GetScreenHeight()) / 1080.0), s:" ", f:coordinate * fixed(GetScreenHeight()) / 1080.0, s:" ", f:coordinate * fixed((int)GetScreenHeight()) / 1080.0);
     return temp;
 }
 
 function fixed CSHudYCoord()
 {
     //return CSHudScaleYCoord(1044.0);
-    return customceil(0.9666 * Fixed(GetScreenHeight())) + 0.1; //I FUCKING hate hardcoding
+    return BCSUTILS::customceil(0.9666 * Fixed(GetScreenHeight())) + 0.1; //I FUCKING hate hardcoding
 }
 
 function fixed CSHudX_Ammo_Offset()
 {
-    return customceil(-1.0/20.0 * fixed((GetAspectRatio() != ASPECT_4_3 ? (int)GetScreenWidth() * 3/4 : (int)GetScreenWidth())) + 72.0);
+    return BCSUTILS::customceil(-1.0/20.0 * fixed((BCSUTILS::GetAspectRatio() != BCSUTILS::ASPECT_4_3 ? (int)GetScreenWidth() * 3/4 : (int)GetScreenWidth())) + 72.0);
 }
 
 function fixed CSHudX_Timer_Offset()
 {
-    return customceil(-1.0/32.0 * fixed((GetAspectRatio() != ASPECT_4_3 ? (int)GetScreenWidth() * 3/4 : (int)GetScreenWidth())) + 45.0)   ;
+    return BCSUTILS::customceil(-1.0/32.0 * fixed((BCSUTILS::GetAspectRatio() != BCSUTILS::ASPECT_4_3 ? (int)GetScreenWidth() * 3/4 : (int)GetScreenWidth())) + 45.0)   ;
 }
 
 function fixed CSHudY_Offset()
 {
-    return customceil(-1.0/40.0 * fixed((int)GetScreenHeight()) + 27.0);
+    return BCSUTILS::customceil(-1.0/40.0 * fixed((int)GetScreenHeight()) + 27.0);
 }
 
 function fixed CSHudYCoord_Timer()
@@ -58,7 +58,7 @@ function fixed CSHudYCoord_Timer()
         return CSHudYCoord();
     }
 
-    return customceil(0.0185 * Fixed(GetScreenHeight())) + 0.1; //20 / 1080
+    return BCSUTILS::customceil(0.0185 * Fixed(GetScreenHeight())) + 0.1; //20 / 1080
 }
 
 Script "CSHud" ENTER CLIENTSIDE
@@ -69,10 +69,10 @@ Script "CSHud" ENTER CLIENTSIDE
     while(1)
     {
         SetFont("CSHud");
-        SetHUDSize((GetAspectRatio() != ASPECT_4_3 ? (int)GetScreenWidth() * 3/4 : (int)GetScreenWidth()), (int)GetScreenHeight(), true);
+        SetHUDSize((BCSUTILS::GetAspectRatio() != BCSUTILS::ASPECT_4_3 ? (int)GetScreenWidth() * 3/4 : (int)GetScreenWidth()), (int)GetScreenHeight(), true);
 
         // Health
-        HudMessage(s:"+ ", d:GetActorHealth(0); HUDMSG_PLAIN|HUDMSG_ALPHA, -3200, CR_GOLD
+        HudMessage(s:"+ ", d:BCSUTILS::GetActorHealth(0); HUDMSG_PLAIN|HUDMSG_ALPHA, -3200, CR_GOLD
         , CSHudXCoord(CSHUD_HEALTH_X_PROPORTION)
         , CSHudYCoord() - CSHudY_Offset()
         , 0.0, 0.6);

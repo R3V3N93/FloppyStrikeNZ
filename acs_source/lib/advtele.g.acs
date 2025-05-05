@@ -1,0 +1,40 @@
+// ----------------------------------------
+// THIS FILE IS AUTO-GENERATED.
+// Any modifications may be overwritten.
+// ----------------------------------------
+
+// This file has been automatically generated to maintain data/code consistency.
+// Manual changes could be lost during the next regeneration. It is advised not to modify this file directly.
+
+// Purpose:
+// This file serves as the base ACS file for the given library, exposing all public scripts/functions that you are allowed to use.
+// This file is generated automatically to ensure accuracy and avoid mistakes with missing/unimplemented scripts/functions.
+
+// Usage Guidelines:
+// - DO NOT manually edit this file unless you fully understand its purpose and structure.
+// - DO NOT manually expose public scripts/functions. There is no guarantee these scripts/functions persist in the next version.
+// - If changes are necessary, request modification of the source code and regenerate the file.
+// - Reach out to the developer for assistance with any concerns.
+
+#library "advtele"
+
+/* Libdefines */
+
+#libdefine TELEPORTFOG 1
+#libdefine TELEPORTTRANSFERVEL 2
+#libdefine TELEPORTUSEANGLE 4
+
+/* Libdefines, generated from enums */
+
+
+/* Public methods */
+
+
+// Teleports the activator of the script to the target TID specifies between `minTargetTID` and `maxTargetTID` (inclusive). Parameter `area` specifies the area to try and teleport the player in. This function guarantees teleportation to the given TIDs, though it does delay to avoid bad recursion.
+function void AdvancedTeleportBetween(int minTargetTID, int maxTargetTID, int area, int flags) {}
+
+// Teleports the activator of the script to the target TID. Parameter `area` specifies the area to try and teleport the player in. This function guarantees teleportation to the given TIDs, though it does delay to avoid bad recursion.
+function void AdvancedTeleport(int targetTid, int area, int flags) {}
+
+// Teleports the source TID to the targetTID or around it based on the `area` provided, without telefragging or getting stuck. `threshold` specifies the number of attempts before failing. Returns `true` if succeeded.
+function bool TryAdvancedTeleport(int sourceTID, int targetTID, int threshold, int area, int flags) {}

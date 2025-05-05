@@ -25,7 +25,7 @@ struct PlayerInfo
 function bool CheckPlayerNumber(int pnum, str func)
 {
     // Checks if pnum is valid playernumber
-    if(pnum < 0 || pnum >= MAX_PLAYERS)
+    if(pnum < 0 || pnum >= BCSUTILS::MAX_PLAYERS)
     {
         LogError(__FUNCTION__ + " : Called from " + func + " : pnum " + str(pnum) + " is not a valid playernumber! Returning false.");
         return false;
@@ -48,7 +48,7 @@ function int GetPlayerNumberFromTid(int tid)
     return tid - CONST_PLAYER_TID;
 }
 
-struct Playerinfo players[MAX_PLAYERS];
+struct Playerinfo players[BCSUTILS::MAX_PLAYERS];
 
 function bool HideHud()
 {
@@ -71,11 +71,11 @@ Script "Update_Player" ENTER
     while(1)
     {
         HideHud();
-        players[pn].alive = IsAlive();
+        players[pn].alive = BCSUTILS::IsAlive();
 
         //players[pn].infected = CSCheckInfection(pn);
-        players[pn].species = gETActorProperty(0, APROP_Species);
-        players[pn].speed = GetActorSpeed(0);
+        players[pn].species = GetActorProperty(0, APROP_Species);
+        players[pn].speed = BCSUTILS::GetActorSpeed(0);
         players[pn].class = GetActorClass(0);
 
         players[pn].team = PlayerTeam();

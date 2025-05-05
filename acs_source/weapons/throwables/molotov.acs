@@ -13,7 +13,7 @@ script "Molotov_Damage" (void)
 		int fire_tid = UniqueTID();
 		int pnum = GetPlayerNumberFromTid(oldtid);
 
-		if(!SpawnForced("CS163D_Fire", GetActorX(pnum), GetActorY(pnum), GetActorZ(pnum) + GetActorHeight(pnum) / 2.0, fire_tid))
+		if(!SpawnForced("CS163D_Fire", GetActorX(pnum), GetActorY(pnum), GetActorZ(pnum) + BCSUTILS::GetActorHeight(pnum) / 2.0, fire_tid))
 			LogError(StrParam(s:"Molotov_Damage : Fire actor not spawned!"));
 		
 		SetActivator(fire_tid);
@@ -25,16 +25,16 @@ script "Molotov_Damage" (void)
 		for(int i = 0; i < 5; i++)
 		{
 			LogDebug(StrParam(s:"Molotov_Damage : Player " + str(pnum)));
-			LogDebug(StrParam(s:"Molotov_Damage : Speed = " + str(GetActorSpeed(oldtid))));
+			LogDebug(StrParam(s:"Molotov_Damage : Speed = " + str(BCSUTILS::GetActorSpeed(oldtid))));
 			Thing_Damage2(oldtid, 25, "normal");
-			SetActorSpeed(oldtid, 0.15);
+			BCSUTILS::SetActorSpeed(oldtid, 0.15);
 			Delay(35);
 		}
 		Thing_Remove(fire_tid);
-		SetActorSpeed(oldtid, CONST_ZOMBIE_SPEED);
+		BCSUTILS::SetActorSpeed(oldtid, CONST_ZOMBIE_SPEED);
 		TakeInventory("CS163D_Fire_Boolean", 1);
 		LogDebug(StrParam(s:"Molotov_Damage : Finished"));
-		LogDebug(StrParam(s:"Molotov_Damage : Speed = " + str(GetActorSpeed(oldtid))));
+		LogDebug(StrParam(s:"Molotov_Damage : Speed = " + str(BCSUTILS::GetActorSpeed(oldtid))));
 	}
 	else
 	{

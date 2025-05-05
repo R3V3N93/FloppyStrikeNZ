@@ -1,7 +1,7 @@
 Script "GetInflictorName" (void)
 {
     SetActivatorToTarget(0);
-    SetResultValue(PlayerName(PlayerNumber()));
+    SetResultValue(BCSUTILS::PlayerName(PlayerNumber()));
 }
 
 //@public 

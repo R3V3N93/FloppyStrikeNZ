@@ -1,6 +1,7 @@
-#library "csnexon"
 #nocompact
 #pragma raw include on
+
+#library "csnexon"
 
 #import "zcommon.bcs"
 
@@ -8,6 +9,9 @@
 
 #import "log.g.acs"
 #import "DebugHud.g.acs"
+#import "acs/extradata/ex_speci.acs"
+
+//#import "lib/advtele.g.acs"
 
 #include "headers/defines.h.acs"
 #include "headers/exceptions.h.acs"
@@ -32,9 +36,7 @@
 #include "weapons/throwables/molotov.acs"
 #include "weapons/throwables/zbomb.acs"
 
-#include "acs_source_public/advtele.g.acs"
-#include "mode/escape.acs"
-#import "acs/extradata/ex_speci.acs"
+//#include "mode/escape.acs"
 
 // GLOBAL TODO
 //@TODO Manage error codes
@@ -55,7 +57,7 @@ Script "player_main" ENTER
 {
     delay(1);
     hudmessage(s:game.map, s:"  \n\    map by ", s:game.author; HUDMSG_FADEOUT,0,CR_RED,0.5,0.1,9.0,1.0);
-    SetActorSpeed(0, CONST_CS16_OG_SPEED);
+    BCSUTILS::SetActorSpeed(0, CONST_CS16_OG_SPEED);
 
     switch(game.mode)
     {
@@ -189,7 +191,7 @@ Script "main" OPEN
                     {
                         while(1)
                         {
-                            int temphost = random(0, MAX_PLAYERS - 1);
+                            int temphost = random(0, BCSUTILS::MAX_PLAYERS - 1);
                             if(!players[temphost].host && PlayerInGame(temphost))
                             {
                                 players[temphost].host = true;
@@ -199,7 +201,7 @@ Script "main" OPEN
                         } // It shouldn't get stuck in infinite loop in formal way..
                     }
 
-                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
                     {
                         if(players[i].host == true)
                         {   
@@ -232,7 +234,7 @@ Script "main" OPEN
                     }
 
                     // Checks for innocent survivors who became host zombies for some reason.
-                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
                     {
                         if(!players[i].host && players[i].infected)
                         {
@@ -255,7 +257,7 @@ Script "main" OPEN
                 // If timer is over, The code kills every zombies, so that the blue team can win
                 if(game.timer <= 0)
                 {
-                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
                     {
                         if(players[i].infected)
                         {
@@ -287,7 +289,7 @@ Script "main" OPEN
                 }
                 delay(1);
             }
-        case CSGM_ZE:
+        /*case CSGM_ZE:
             if(GetGameModeState() == GAMESTATE_INPROGRESS)
             {
                 SetState(CONST_GAMESTATE_BUY);
@@ -309,7 +311,7 @@ Script "main" OPEN
                     {
                         while(1)
                         {
-                            int temphost = random(0, MAX_PLAYERS - 1);
+                            int temphost = random(0, BCSUTILS::MAX_PLAYERS - 1);
                             if(!players[temphost].host && PlayerInGame(temphost))
                             {
                                 players[temphost].host = true;
@@ -319,7 +321,7 @@ Script "main" OPEN
                         } // It shouldn't get stuck in infinite loop in formal way..
                     }
 
-                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
                     {
                         if(players[i].host == true)
                         {   
@@ -355,7 +357,7 @@ Script "main" OPEN
                     }
 
                     // Checks for innocent survivors who became host zombies for some reason.
-                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
                     {
                         if(!players[i].host && players[i].infected)
                         {
@@ -377,7 +379,7 @@ Script "main" OPEN
                 // If timer is over, The code kills every zombies, so that the blue team can win
                 if(fdm_ze_escaped)
                 {
-                    for(int i = 0; i < MAX_PLAYERS; i++)
+                    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
                     {
                         if(players[i].infected)
                         {
@@ -409,7 +411,7 @@ Script "main" OPEN
                     break;
                 }
                 delay(1);
-            }
+            }*/
         case CSGM_DEV:
             game.state = CONST_GAMESTATE_BUY;
     }
@@ -422,7 +424,7 @@ Script "ZombieBombGiver" (void)
         // Every one minutes elapsed, it gives a zombie bomb to host zombies.
         if(((game.timer - 1) % 60) == 0)
         {
-            for(int i = 0; i < MAX_PLAYERS; i++)
+            for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
             {
                 if(players[i].host && players[i].alive)
                 {

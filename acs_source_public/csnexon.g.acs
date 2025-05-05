@@ -36,24 +36,13 @@
 #libdefine SND_CONST_ZBOMB_REGEN "zombi_bomb_regen"
 #libdefine CONST_CS16_OG_SPEED 0.4
 #libdefine CONST_ZOMBIE_SPEED 0.5
-#libdefine EXCEPTION_PREP 0x01
-#libdefine EXCEPTION_HOST_ZOMBIE 0x02
-#libdefine EXCEPTION_FAILED_TEAMSET 0x03
-#libdefine EXCEPTION_WRONG_HOST 0x04
-#libdefine CONST_PREPARE_TIME_DEFAULT  20
-#libdefine CONST_GAME_TIME_DEFAULT  180
 #libdefine CONST_GAMESTATE_PREP 0x01
 #libdefine CONST_GAMESTATE_BUY 0x02
 #libdefine CONST_GAMESTATE_BEGUN 0x03
-#libdefine CONST_TIMER_PREP 0x01
-#libdefine CONST_TIMER_GAME 0x02
 #libdefine CSGM_OG 0
 #libdefine CSGM_ZM 1
 #libdefine CSGM_ZE 2
 #libdefine CSGM_DEV 3
-#libdefine SYNC_STATE  8900
-#libdefine SYNC_TIME  8901
-#libdefine SYNC_CSPRINT  8902
 #libdefine CONST_WEAPONS_NOTSUPP  0
 #libdefine CONST_WEAPONS_HG 1, // Pistols
 #libdefine CONST_WEAPONS_SG 2, // Shotguns
@@ -62,25 +51,6 @@
 #libdefine CONST_WEAPONS_ME 5, // Melee
 #libdefine CONST_WEAPONS_GR 6, // Grenades(equiments)
 #libdefine CONST_WEAPONS_TYPES_AMOUNT  6
-#libdefine CONST_WEAPONS_PREFIX "CS163d_"
-#libdefine CONST_WEAPONS_TYPE_HG "CS163d_HG"
-#libdefine CONST_WEAPONS_TYPE_SG "CS163d_SG"
-#libdefine CONST_WEAPONS_TYPE_RF "CS163d_RF"
-#libdefine CONST_WEAPONS_TYPE_MG "CS163d_MG"
-#libdefine CONST_WEAPONS_TYPE_ME "CS163d_ME"
-#libdefine CONST_WEAPONS_TYPE_GR "CS163d_GR"
-#libdefine CSHUD_HEALTH_X_PROPORTION 0.0067708333,//fixed(13 / int(1920.0))
-#libdefine CSHUD_ARMOUR_X_PROPORTION 0.201041666, //fixed(386.0 / 1920.0)
-#libdefine CSHUD_TIMER_X_1_PROPORTION 0.4671875,//fixed(897.0 / 1920.0)
-#libdefine CSHUD_TIMER_X_2_PROPORTION 0.503125,//fixed(966.0 / 1920.0)
-#libdefine CSHUD_TIMER_X_3_PROPORTION 0.525,//fixed(1008.0 / 1920.0)
-#libdefine CSHUD_AMMO_1_PROPORTION 0.9354166666666667,//fixed(1796.0 / 1920.0)
-#libdefine CSHUD_AMMO_2_PROPORTION 0.9401041666,//fixed(1805.0 / 1920.0)
-#libdefine CSHUD_AMMO_3_PROPORTION 0.978125//fixed(1878.0 / 1920.0)
-#libdefine ERR_NOT_PLAYER  -1
-#libdefine ERR_ALREADY_ZOMBIE  -2
-#libdefine ERR_NOT_ALIVE  -3
-#libdefine ERR_NOT_SUCC  -4
 
 /* Public methods */
 
@@ -100,6 +70,7 @@ function str CSGetWeaponMag(str weapon) {}
 
 // returns what ammo does the weapon use. [R3V'S SELFISH NOTE : I don't like this personally, as it is hardcoded to set appropriate ammotype according to the weapon's type, not parsing them automatically. ye]
 function str CSGetWeaponAmmo(str weapon) {}
+function void CSBuyMenuConfigDefault(void) {}
 function int GetZombieCount(void) {}
 
 // Checks if given playernumber's player is zombie or not.

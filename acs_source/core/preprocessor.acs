@@ -28,12 +28,12 @@ function str CSMapAuthor()
 
 function int CSDefaultTimer_Game()
 {
-    return atoi(StrParam(l:"CS_TIMER_GAME_" + StrParam(n:PRINTNAME_LEVEL)));
+    return BCSUTILS::atoi(StrParam(l:"CS_TIMER_GAME_" + StrParam(n:PRINTNAME_LEVEL)));
 }
 
 function int CSDefaultTimer_Prep()
 {
-    return atoi(StrParam(l:"CS_TIMER_PREP_" + StrParam(n:PRINTNAME_LEVEL)));
+    return BCSUTILS::atoi(StrParam(l:"CS_TIMER_PREP_" + StrParam(n:PRINTNAME_LEVEL)));
 }
 
 Script "PreProcessor" OPEN

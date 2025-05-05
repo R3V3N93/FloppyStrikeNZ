@@ -1,11 +1,14 @@
 
-#import "acs_source_public/csbuy.g.acs"
+#import "lib/csbuy.g.acs"
 #include "description.acs"
 
 strict namespace
 {
 
-void CSBuyMenuConfig()
+void CSBuyMenuConfig() {}
+
+//@public
+function void CSBuyMenuConfigDefault()
 {
 	CSBuy_BuymenuSetup("integar", "calibri");
     CSBuy_AddSlot(1, 1);
@@ -31,6 +34,7 @@ void CSBuyMenuConfig()
 	if(game.mode == CSGM_ZM || !IsTerror())
 		CSBuy_AddWeapon(4, "MAVERICK M4A1 CARBINE", "CS163D_RF_M4A1", 0, CS_WEAP_DESC_M4A1, "m4a1m4a1", false);
 	CSBuy_AddWeapon(4, "D3/AU-1", "CS163D_RF_TRGAYGUN", 0, CS_WEAP_DESC_G3, "g3g3g3g3", false);
+	CSBuy_AddWeapon(4, "MAGNUM SNIPER RIFLE", "CS163D_RF_AWP", 0, CS_WEAP_DESC_AWP, "awpawpaw", false);
 
 	CSBuy_AddCategory("MACHINE GUNS", 1);
 	CSBuy_AddWeapon(5, "ES M249 PARA", "CS163D_MG_M249", 0, CS_WEAP_DESC_M249, "m249m249", false);
@@ -50,12 +54,12 @@ Script "buymenu" ENTER ClientSide
         terminate; 
 		
 	delay(5);
-	CSBuyMenuConfig();
+	//CSBuyMenuConfig();
     while(1)
     {
         if(GetState() == CONST_GAMESTATE_BUY)
         {
-            if(KeyPressed(BT_USE))
+            if(BCSUTILS::KeyPressed(BT_USE))
             {
                 CSBuy_Buymenu();
             }

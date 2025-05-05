@@ -13,7 +13,7 @@ Script "Killswitch" (void)
     // Makes sure to update the structs properly
     delay(10);
     Log(s:"\n\nFIX THIS BULLSHIT R3V YOU DOG SHIT!!");
-    for(int i = 0; i < MAX_PLAYERS; i++)
+    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
     {
         Thing_Damage2(GetPlayerTid(i), 100000, "normal");
     }
@@ -25,7 +25,7 @@ Script "Killswitch" (void)
     Log(s:"\ngame.hostnum == " + str(game.hostnum));
     Log(s:"\ntimertype == " + str(game.timertype));
 
-    for(int i = 0; i < MAX_PLAYERS; i++)
+    for(int i = 0; i < BCSUTILS::MAX_PLAYERS; i++)
     {
         if(PlayerInGame(i))
         {

@@ -12,7 +12,7 @@ enum WEAPONS : int
     CONST_WEAPONS_TYPES_AMOUNT = 6
 };
 
-internal enum WEAPONS_str : str
+private enum WEAPONS_str : str
 {
     CONST_WEAPONS_PREFIX = "CS163d_",
     CONST_WEAPONS_TYPE_HG = "CS163d_HG",
@@ -38,7 +38,7 @@ function int CSDistinguishWeapon(str weapon)
 {
     for(int i = 0; i < CONST_WEAPONS_TYPES_AMOUNT; i++)
     {
-        if(StrFindI(weapon, _CSWeaponsTypes[i]) != -1)
+        if(BCSUTILS::StrFindI(weapon, _CSWeaponsTypes[i]) != -1)
             return i + 1;
     }
     return 0;

@@ -1,0 +1,75 @@
+// ----------------------------------------
+// THIS FILE IS AUTO-GENERATED.
+// Any modifications may be overwritten.
+// ----------------------------------------
+
+// This file has been automatically generated to maintain data/code consistency.
+// Manual changes could be lost during the next regeneration. It is advised not to modify this file directly.
+
+// Purpose:
+// This file serves as the base ACS file for the given library, exposing all public scripts/functions that you are allowed to use.
+// This file is generated automatically to ensure accuracy and avoid mistakes with missing/unimplemented scripts/functions.
+
+// Usage Guidelines:
+// - DO NOT manually edit this file unless you fully understand its purpose and structure.
+// - DO NOT manually expose public scripts/functions. There is no guarantee these scripts/functions persist in the next version.
+// - If changes are necessary, request modification of the source code and regenerate the file.
+// - Reach out to the developer for assistance with any concerns.
+
+#library "csbuy"
+
+/*
+Counter-Strike Buy Menu Library
+Creator : R3V3N93
+
+Makes it possible to use Counter Strike's Buy Menu in any map, with configurable options.
+Originally created for Floppy Disk Mod.
+In order to use this, #import this file(csbuy.g.acs) in your file.
+*/
+
+/* Public methods */
+
+//
+// IMPORTANT NOTE : ALL METHODS NEED TO BE RUN FROM CLIENTSIDE
+//
+
+// Adds a slot
+function void CSBuy_AddSlot(int slotnum, int max_weapons) {}
+// [parameters]
+// -slotnum (0 ~ 9) : Defines what slot to be defined at. This value corresponds to DOOM's weapons slots, of course
+// -max_weapons (equal to or larger than 1) : Defines how many weapons can be stored in this slot
+//                                            (e.g. Multiple grenade items like flash, he, and smoke into one single slot.)
+
+// Adds a category.
+function void CSBuy_AddCategory(str name, int slot) {}
+// [parameters]
+// -name (string name) : Name of the category. CSBUY_EMPTY_BTN can be used in order to create empty space in this button space
+// -slot (0 ~ 9) : What slot is the category's in charge. Slot has to be defined with CSBuy_AddSlot()
+
+// Adds a weapon to a category.
+function void CSBuy_AddWeapon(int category, str displayname, str actorname, int price, str description, str image, bool ignore_category_slotmax) {}
+// [parameters]
+// -category (1 ~ 9) : Defines what category will store this weapon. Category needs to be setupped via CSBuy_AddCategory()
+// -displayname (string) : Name to be displayed on the screen
+// -actorname (string weaponname) : Weapon's ACTOR name to give to the buyer. 
+//                                  Note that this is the only matter that the buy menu checks for duplicate, which means other parameters are free to be duplicate, but not this.
+//                                  CSBUY_EMPTY_BTN can be passed to this in order to create empty space in this weapon section
+// -price (equal to or larger than 0) : Price of the following weapon. passing 0 will make it displayed as "FREE"
+// -description (string) : Description for the item. Pass "" to write nothing.
+// -image (string imagename) : Image to use for the item. If image file you input is non existent, an icon of question mark on top of red ak47 will take its place instead
+// -ignore_category_slotmax (bool) : Ignores CSBuy_AddSlot()'s max_weapons parameter. Used for items like kevlar vest, or night vision goggles(if you do care about it in cs1.6 LMFAO).
+
+// Configures the buy menu. NOTE that this is necessary before initializing buymenu via CSBuy_Buymenu()
+function void CSBuy_BuymenuSetup(str currency, str font) {}
+// [parameters]
+// -currency (string itemname) : An item's ACTOR name to be used as currency.
+// -font (string fontname) : The font to be used for the entire buymenu's texts. 
+//                           CALIBRI is the most preferred font, as the library is built based on it.
+//                           If you want your font to be stabilized for this library, Use DOOM Font Genesis to make a font with size 48
+
+// Runs CS Buymenu with priorily setup informations.
+function void CSBuy_Buymenu(void) {}
+
+
+// Ends CS Buymenu
+function void CSBuy_Terminate(void) {}
