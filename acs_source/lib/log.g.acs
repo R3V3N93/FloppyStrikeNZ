@@ -1,0 +1,57 @@
+// ----------------------------------------
+// THIS FILE IS AUTO-GENERATED.
+// Any modifications may be overwritten.
+// ----------------------------------------
+
+// This file has been automatically generated to maintain data/code consistency.
+// Manual changes could be lost during the next regeneration. It is advised not to modify this file directly.
+
+// Purpose:
+// This file serves as the base ACS file for the given library, exposing all public scripts/functions that you are allowed to use.
+// This file is generated automatically to ensure accuracy and avoid mistakes with missing/unimplemented scripts/functions.
+
+// Usage Guidelines:
+// - DO NOT manually edit this file unless you fully understand its purpose and structure.
+// - DO NOT manually expose public scripts/functions. There is no guarantee these scripts/functions persist in the next version.
+// - If changes are necessary, request modification of the source code and regenerate the file.
+// - Reach out to the developer for assistance with any concerns.
+
+#library "log"
+
+/* Libdefines */
+
+
+/* Libdefines, generated from enums */
+
+#libdefine SEVERITYDEBUG 0
+#libdefine SEVERITYINFO 1
+#libdefine SEVERITYWARNING 2
+#libdefine SEVERITYERROR 3
+#libdefine SEVERITYNONE 4
+
+/* Public methods */
+
+
+// Sends a log message to the client with the given id.
+function void LogTo(str message, int clientId) {}
+
+// Sends a log message to the activator of the function.
+function void LogActivator(str message) {}
+
+// Sends a log message to everybody except the player with the given id.
+function void LogExcept(str message, int id) {}
+
+// Sends a log message to all clients.
+function void LogBold(str message) {}
+
+// Sends a debug log message to all clients.
+function void LogDebug(str message) {}
+
+// Sends an info log message to all clients.
+function void LogInfo(str message) {}
+
+// Sends a warning log message to all clients.
+function void LogWarning(str message) {}
+
+// Sends an error log message to all clients.
+function void LogError(str message) {}

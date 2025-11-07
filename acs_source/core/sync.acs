@@ -1,6 +1,6 @@
 strict namespace {
 
-private enum CS_SYNC : int
+internal enum CS_SYNC : int
 {
     SYNC_STATE = 8900,
     SYNC_TIME = 8901,
@@ -16,8 +16,8 @@ Script "CSSync" OPEN
 {
     While(1)
     {
-        delay(35);
 		SyncTime();
+		delay(1);
     }
 }
 

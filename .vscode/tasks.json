@@ -1,0 +1,61 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        //////////////////////
+        // Compile
+        //////////////////////
+        {
+            "label": "Compile",
+            "type": "shell",
+            
+            "command": "\"D:\\Projects\\DOOM2\\Projects\\FDM\\Compilers\\zt-bcc\\zt-bcc.exe\"", //compiler location.
+            "args": [
+                "${workspaceFolder}\\acs_source\\csnexon.acs", //source file.
+                "${workspaceFolder}\\acs\\csnexon.o" // object file location.
+            ],
+            "problemMatcher": {
+                "owner": "custom",
+                "pattern": [
+                    {
+                        "regexp": "^(.*?):(\\d+):(\\d+):\\s*(error|warning|note):\\s*(.*)$",
+                        "file": 1,
+                        "line": 2,
+                        "column": 3,
+                        "severity": 4,
+                        "message": 5
+                    },
+                    {
+                        "regexp": "^\\s+(.*)$",
+                        "message": 1
+                    }
+                ]
+            },
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        //////////////////////
+        // Test
+        //////////////////////
+        {
+            "label" : "Test",
+            "type": "shell",
+            
+            "command": "\"D:\\game\\Zandronum\\zandronum.exe\"", //Zand
+            "args": [
+                "-file",
+                "\"D:\\Projects\\DOOM2\\Projects\\FDM\\Floppy-Disk-Gang-Mod\"", // FDM root
+                "+logfile \"${workspaceFolder}\\log\\log.txt\"",
+                "+cl_fdm_logseverity 0",
+            ],
+
+            "group": {
+                "kind": "test",
+                "isDefault": true
+            }
+        }
+    ]
+}

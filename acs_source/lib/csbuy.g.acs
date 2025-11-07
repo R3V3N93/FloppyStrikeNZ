@@ -73,3 +73,6 @@ function void CSBuy_Buymenu(void) {}
 
 // Ends CS Buymenu
 function void CSBuy_Terminate(void) {}
+
+// Toggles disability on CS Buymenu
+function void CSBuy_ToggleDisable(void) {}

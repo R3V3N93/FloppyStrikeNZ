@@ -1,0 +1,45 @@
+// ----------------------------------------
+// THIS FILE IS AUTO-GENERATED.
+// Any modifications may be overwritten.
+// ----------------------------------------
+
+// This file has been automatically generated to maintain data/code consistency.
+// Manual changes could be lost during the next regeneration. It is advised not to modify this file directly.
+
+// Purpose:
+// This file serves as the base ACS file for the given library, exposing all public scripts/functions that you are allowed to use.
+// This file is generated automatically to ensure accuracy and avoid mistakes with missing/unimplemented scripts/functions.
+
+// Usage Guidelines:
+// - DO NOT manually edit this file unless you fully understand its purpose and structure.
+// - DO NOT manually expose public scripts/functions. There is no guarantee these scripts/functions persist in the next version.
+// - If changes are necessary, request modification of the source code and regenerate the file.
+// - Reach out to the developer for assistance with any concerns.
+
+#library "DebugHud"
+
+/* Libdefines */
+
+
+/* Libdefines, generated from enums */
+
+
+/* Public methods */
+
+
+// always remind that the type starts from 0 to a value deducted one from the set value.
+function void SetDebugTypeQuantity(int amount) {}
+
+// Adds an item to a debug hud type
+function void AddDebugInfoTrackerItem(int type, str description, str value) {}
+
+// Shows debug hud displaying multitude of informations
+function void DisplayDebugHud(void) {}
+
+// Must be set prior to anythings!
+function void SetDebugHudGap(int gap) {}
+
+// Optional.
+function void SetDebugHudYOffset(int offset) {}
+function void NameDebugType(int type, str name) {}
+function void ClearDebugItems(void) {}

@@ -7,9 +7,9 @@
 
 #include "lib/bcsutils.acs"
 
-#import "log.g.acs"
-#import "DebugHud.g.acs"
-#import "acs/extradata/ex_speci.acs"
+#import "lib/log.g.acs"
+#import "lib/DebugHud.g.acs"
+#import "lib/ex_speci.acs"
 
 //#import "lib/advtele.g.acs"
 

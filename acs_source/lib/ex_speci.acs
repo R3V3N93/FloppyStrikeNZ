@@ -1,0 +1,13 @@
+#library "ex_speci"
+
+// ==== Script Declarations ====
+script "FDM_RewardedKill" (void){}
+script "BulletTime_Simulated" (int speed){}
+script "Flatten_Bonk" (void){}
+script "OmegaSkinFixLMAO" enter{}
+script "Zandronum_Chasecam" (int enable){}
+script "View_PFP" (void) NET CLIENTSIDE{}
+script "Bullet_Flashlight_Use" (void) CLIENTSIDE{}
+
+// ==== Function Declarations ====
+function void SetPlayerSkin_ZAN (int player, str skin){}

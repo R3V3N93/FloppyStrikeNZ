@@ -1,6 +1,6 @@
 strict namespace{
 
-private bool fdm_ze_escaped = false;
+internal bool fdm_ze_escaped = false;
 
 //@public
 //@summary A function for mappers to activate humans' escape sequence

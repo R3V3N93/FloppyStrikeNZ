@@ -65,9 +65,10 @@ Script "buymenu" ENTER ClientSide
             }
 			CSPrint("Press " + StrParam(k:"+USE") + " to open buy menu." + " Game starts after current timer ends.");
         }
-
+		
         if(GetState() == CONST_GAMESTATE_BEGUN)
 		{
+			CSBuy_ToggleDisable();
 			ClearCSPrint();
 			CSBuy_Terminate();
             break;
